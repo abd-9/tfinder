@@ -23,6 +23,7 @@ import {
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import {AuthNavigator} from './src/navigation/auth.navigator';
+import {NavigationContainer} from '@react-navigation/native';
 
 /**
  * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
@@ -36,9 +37,11 @@ export default (): React.ReactElement => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.light}>
-      <Layout style={styles.container}>
-        <AuthNavigator />
-      </Layout>
+      <NavigationContainer>
+        <Layout style={styles.container}>
+          <AuthNavigator />
+        </Layout>
+      </NavigationContainer>
     </ApplicationProvider>
   </>
 );

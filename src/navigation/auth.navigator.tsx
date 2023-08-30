@@ -1,5 +1,5 @@
 import React from 'react';
-// import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 // import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 // import {AuthScreen} from '../scenes/auth/auth.component';
 // import {AuthGridScreen} from '../scenes/auth/auth-grid.component';
@@ -16,7 +16,7 @@ import React from 'react';
 import {ForgotPasswordScreen} from '../scenes/auth/forgot-password.component';
 
 // const TopTab = createMaterialTopTabNavigator();
-// const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 
 // const AuthMenuNavigator = (): React.ReactElement => (
 //   <TopTab.Navigator tabBar={props => <AuthScreen {...props} />}>
