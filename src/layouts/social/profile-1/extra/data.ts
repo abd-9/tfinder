@@ -1,15 +1,15 @@
-import { ImageSourcePropType } from 'react-native';
+import {ImageSourcePropType} from 'react-native';
 
 export class Profile {
-
-  constructor(readonly firstName: string,
-              readonly lastName: string,
-              readonly photo: ImageSourcePropType,
-              readonly location: string,
-              readonly followers: number,
-              readonly following: number,
-              readonly posts: number) {
-  }
+  constructor(
+    readonly firstName: string,
+    readonly lastName: string,
+    readonly photo: ImageSourcePropType,
+    readonly location: string,
+    readonly followers: number,
+    readonly following: number,
+    readonly posts: number,
+  ) {}
 
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
@@ -41,22 +41,19 @@ export class Profile {
 }
 
 export class Post {
-
-  constructor(readonly image: ImageSourcePropType,
-              readonly author: Profile,
-              readonly date: string,
-              readonly likes: Like[]) {
-  }
+  constructor(
+    readonly image: ImageSourcePropType,
+    readonly author: Profile,
+    readonly date: string,
+    readonly likes: Like[],
+  ) {}
 
   static byAlexaTenorio(): Post {
     return new Post(
       require('../assets/image-post-1.jpg'),
       Profile.alexaTenorio(),
       'Today 12:35 pm',
-      [
-        Like.byAlexaTenorio(),
-        Like.byJenniferGreen(),
-      ],
+      [Like.byAlexaTenorio(), Like.byJenniferGreen()],
     );
   }
 
@@ -65,17 +62,13 @@ export class Post {
       require('../assets/image-post-2.jpg'),
       Profile.jenniferGreen(),
       'Today 12:35 pm',
-      [
-        Like.byAlexaTenorio(),
-      ],
+      [Like.byAlexaTenorio()],
     );
   }
 }
 
 export class Like {
-
-  constructor(readonly author: Profile) {
-  }
+  constructor(readonly author: Profile) {}
 
   static byAlexaTenorio(): Like {
     return new Like(Profile.alexaTenorio());

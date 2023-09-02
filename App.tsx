@@ -41,6 +41,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaLayout} from './src/components/safe-area-layout.component';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {DashboardsNavigator} from './src/navigation/dashboards.navigator';
+import {SocialNavigator} from './src/navigation/social.navigator';
 // import {createStackNavigator} from '@react-navigation/stack';
 
 /**
@@ -74,6 +75,7 @@ export default (): React.ReactElement => {
           </Layout> */}
           <Stack.Navigator screenOptions={{headerShown: false}}>
             {/* <Stack.Screen name="Auth" component={AuthMenuNavigator} /> */}
+            <Stack.Screen name="Profile" component={SocialNavigator} />
             <Stack.Screen name="Main" component={DashboardsNavigator} />
             <Stack.Screen name="Auth" component={AuthNavigator} />
             {/* <Stack.Screen name="SignIn2" component={TestScreen} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageProps, View } from 'react-native';
+import {ImageProps, View} from 'react-native';
 import {
   Card,
   CardElement,
@@ -16,23 +16,20 @@ export interface ProfileParameterCardProps extends Omit<CardProps, 'children'> {
   icon: (style: StyleType) => React.ReactElement<ImageProps>;
 }
 
-export const ProfileParameterCard = (props: ProfileParameterCardProps): CardElement => {
-
+export const ProfileParameterCard = (
+  props: ProfileParameterCardProps,
+): CardElement => {
   const styles = useStyleSheet(themedStyles);
 
-  const { hint, value, icon, ...restProps } = props;
+  const {hint, value, icon, ...restProps} = props;
 
   return (
     <Card {...restProps}>
       <View style={styles.topContainer}>
-        <Text appearance='hint'>
-          {hint}
-        </Text>
+        <Text appearance="hint">{hint}</Text>
         {icon(styles.icon)}
       </View>
-      <Text
-        style={styles.valueLabel}
-        category='h5'>
+      <Text style={styles.valueLabel} category="h5">
         {value}
       </Text>
     </Card>
