@@ -1,12 +1,16 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Input, Text } from '@ui-kitten/components';
-import { ImageOverlay } from './extra/image-overlay.component';
-import { ArrowForwardIcon, FacebookIcon, GoogleIcon, TwitterIcon } from './extra/icons';
-import { KeyboardAvoidingView } from './extra/3rd-party';
+import {StyleSheet, View} from 'react-native';
+import {Button, Input, Text} from '@ui-kitten/components';
+import {ImageOverlay} from './extra/image-overlay.component';
+import {
+  ArrowForwardIcon,
+  FacebookIcon,
+  GoogleIcon,
+  TwitterIcon,
+} from './extra/icons';
+import {KeyboardAvoidingView} from './extra/3rd-party';
 
-export default ({ navigation }): React.ReactElement => {
-
+export default ({navigation}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
 
@@ -24,17 +28,14 @@ export default ({ navigation }): React.ReactElement => {
         style={styles.container}
         source={require('./assets/image-background.jpg')}>
         <View style={styles.signInContainer}>
-          <Text
-            style={styles.signInLabel}
-            status='control'
-            category='h4'>
+          <Text style={styles.signInLabel} status="control" category="h4">
             SIGN IN
           </Text>
           <Button
             style={styles.signUpButton}
-            appearance='ghost'
-            status='control'
-            size='giant'
+            appearance="ghost"
+            status="control"
+            size="giant"
             accessoryLeft={ArrowForwardIcon}
             onPress={onSignUpButtonPress}>
             Sign Up
@@ -42,51 +43,46 @@ export default ({ navigation }): React.ReactElement => {
         </View>
         <View style={styles.formContainer}>
           <Input
-            label='EMAIL'
-            placeholder='Email'
-            status='control'
+            label="EMAIL"
+            placeholder="Email"
+            status="control"
             value={email}
             onChangeText={setEmail}
           />
           <Input
             style={styles.passwordInput}
             secureTextEntry={true}
-            placeholder='Password'
-            label='PASSWORD'
-            status='control'
+            placeholder="Password"
+            label="PASSWORD"
+            status="control"
             value={password}
             onChangeText={setPassword}
           />
         </View>
-        <Button
-          status='control'
-          size='large'
-          onPress={onSignInButtonPress}>
+        <Button status="control" size="large" onPress={onSignInButtonPress}>
           SIGN IN
         </Button>
         <View style={styles.socialAuthContainer}>
-          <Text
-            style={styles.socialAuthHintText}
-            status='control'>
+          <Text style={styles.socialAuthHintText} status="control">
             Sign with a social account
           </Text>
           <View style={styles.socialAuthButtonsContainer}>
             <Button
-              appearance='ghost'
-              size='giant'
-              status='control'
+              appearance="ghost"
+              size="giant"
+              status="control"
               accessoryLeft={GoogleIcon}
             />
             <Button
-              appearance='ghost'
-              size='giant'
-              status='control'
+              appearance="ghost"
+              size="giant"
+              status="control"
               accessoryLeft={FacebookIcon}
             />
             <Button
-              appearance='ghost'
-              size='giant'
-              status='control'
+              appearance="ghost"
+              size="giant"
+              status="control"
               accessoryLeft={TwitterIcon}
             />
           </View>
@@ -137,5 +133,3 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 });
-
-

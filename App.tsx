@@ -11,7 +11,13 @@
  */
 
 import React from 'react';
-import {ImageProps, StyleSheet} from 'react-native';
+import {
+  Alert,
+  ImageProps,
+  StyleSheet,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import {
   ApplicationProvider,
   Button,
@@ -23,7 +29,18 @@ import {
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import {AuthNavigator} from './src/navigation/auth.navigator';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+  NavigationContainerRefWithCurrent,
+  useNavigationContainerRef,
+  useRoute,
+  // useNavigationContainerRef,
+} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {SafeAreaLayout} from './src/components/safe-area-layout.component';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+// import {createStackNavigator} from '@react-navigation/stack';
 
 /**
  * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
@@ -33,18 +50,40 @@ const HeartIcon = (
   props?: Partial<ImageProps>,
 ): React.ReactElement<ImageProps> => <Icon {...props} name="heart" />;
 
-export default (): React.ReactElement => (
-  <>
-    <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <NavigationContainer>
-        <Layout style={styles.container}>
-          <AuthNavigator />
-        </Layout>
-      </NavigationContainer>
-    </ApplicationProvider>
-  </>
-);
+export default (): React.ReactElement => {
+  const navigationRef = useNavigationContainerRef();
+  const Stack = createStackNavigator();
+
+  return (
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <NavigationContainer ref={navigationRef}>
+          {/* <SafeAreaProvider>
+            <SafeAreaLayout insets="top"> */}
+          <Layout>
+            <Button
+              style={styles.likeButton}
+              accessoryLeft={HeartIcon}
+              onPress={() => {
+                navigationRef.navigate('SignIn3', {});
+              }}>
+              LIKE
+            </Button>
+          </Layout>
+          <Stack.Navigator>
+            {/* <Stack.Screen name="Auth" component={AuthMenuNavigator} /> */}
+            <Stack.Screen name="Auth" component={AuthNavigator} />
+            {/* <Stack.Screen name="SignIn2" component={TestScreen} />
+            <Stack.Screen name="SignIn3" component={TestScreen2} /> */}
+          </Stack.Navigator>
+          {/* </SafeAreaLayout> */}
+          {/* </SafeAreaProvider> */}
+        </NavigationContainer>
+      </ApplicationProvider>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -59,3 +98,37 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
 });
+
+type TestScreenProps = {
+  navigation: NavigationContainerRefWithCurrent<ReactNavigation.RootParamList>;
+};
+
+const TestScreen = ({navigation}: TestScreenProps): React.ReactElement => {
+  return (
+    <View>
+      <Button
+        style={styles.likeButton}
+        accessoryLeft={HeartIcon}
+        onPress={(): void => {
+          Alert.alert('test');
+          console.log(navigation.getCurrentRoute()?.name);
+          navigation.navigate('SignIn3', {});
+        }}>
+        Home4
+      </Button>
+    </View>
+  );
+};
+
+const TestScreen2 = ({navigation}): React.ReactElement => {
+  return (
+    <Button
+      style={styles.likeButton}
+      accessoryLeft={HeartIcon}
+      onPress={() => {
+        navigation.navigate('SignIn2', {});
+      }}>
+      Home2 333
+    </Button>
+  );
+};
