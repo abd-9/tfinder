@@ -1,4 +1,4 @@
-import { ImageSourcePropType } from 'react-native';
+import {ImageSourcePropType} from 'react-native';
 
 export enum TrainingLevel {
   EASY = 'Easy',
@@ -7,12 +7,12 @@ export enum TrainingLevel {
 }
 
 export class Training {
-
-  constructor(readonly title: string,
-              readonly duration: number,
-              readonly level: TrainingLevel,
-              readonly image: ImageSourcePropType) {
-  }
+  constructor(
+    readonly title: string,
+    readonly duration: number,
+    readonly level: TrainingLevel,
+    readonly image: ImageSourcePropType,
+  ) {}
 
   get formattedLevel(): string {
     return `${this.level} Level`;

@@ -1,8 +1,8 @@
 import React from 'react';
-import { ListRenderItemInfo, StyleSheet } from 'react-native';
-import { List, Text } from '@ui-kitten/components';
-import { TrainingCard } from './extra/training-card.component';
-import { Training } from './extra/data';
+import {ListRenderItemInfo, StyleSheet} from 'react-native';
+import {List, Text} from '@ui-kitten/components';
+import {TrainingCard} from './extra/training-card.component';
+import {Training} from './extra/data';
 
 const trainings: Training[] = [
   Training.chestEasy(),
@@ -16,15 +16,14 @@ const trainings: Training[] = [
   Training.chestHard(),
 ];
 
-export const TrainingsListScreen = ({ route }): React.ReactElement => {
-
-  const displayTrainings: Training[] = trainings.filter(training => training.level === route.name);
+export const TrainingsListScreen = ({route}): React.ReactElement => {
+  const displayTrainings: Training[] = trainings.filter(
+    training => training.level === route.name,
+  );
 
   const renderHeader = (): React.ReactElement => (
     <React.Fragment>
-      <Text
-        style={styles.headerTitle}
-        appearance='hint'>
+      <Text style={styles.headerTitle} appearance="hint">
         MOST POPULAR
       </Text>
       <List
@@ -37,18 +36,16 @@ export const TrainingsListScreen = ({ route }): React.ReactElement => {
     </React.Fragment>
   );
 
-  const renderHorizontalTrainingItem = (info: ListRenderItemInfo<Training>): React.ReactElement => (
-    <TrainingCard
-      style={styles.horizontalItem}
-      training={info.item}
-    />
+  const renderHorizontalTrainingItem = (
+    info: ListRenderItemInfo<Training>,
+  ): React.ReactElement => (
+    <TrainingCard style={styles.horizontalItem} training={info.item} />
   );
 
-  const renderVerticalTrainingItem = (info: ListRenderItemInfo<Training>): React.ReactElement => (
-    <TrainingCard
-      style={styles.verticalItem}
-      training={info.item}
-    />
+  const renderVerticalTrainingItem = (
+    info: ListRenderItemInfo<Training>,
+  ): React.ReactElement => (
+    <TrainingCard style={styles.verticalItem} training={info.item} />
   );
 
   return (

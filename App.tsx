@@ -40,6 +40,7 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaLayout} from './src/components/safe-area-layout.component';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {DashboardsNavigator} from './src/navigation/dashboards.navigator';
 // import {createStackNavigator} from '@react-navigation/stack';
 
 /**
@@ -71,8 +72,9 @@ export default (): React.ReactElement => {
               LIKE
             </Button>
           </Layout> */}
-          <Stack.Navigator headerMode="none">
+          <Stack.Navigator screenOptions={{headerShown: false}}>
             {/* <Stack.Screen name="Auth" component={AuthMenuNavigator} /> */}
+            <Stack.Screen name="Main" component={DashboardsNavigator} />
             <Stack.Screen name="Auth" component={AuthNavigator} />
             {/* <Stack.Screen name="SignIn2" component={TestScreen} />
             <Stack.Screen name="SignIn3" component={TestScreen2} /> */}
@@ -101,34 +103,4 @@ const styles = StyleSheet.create({
 
 type TestScreenProps = {
   navigation: NavigationContainerRefWithCurrent<ReactNavigation.RootParamList>;
-};
-
-const TestScreen = ({navigation}: TestScreenProps): React.ReactElement => {
-  return (
-    <View>
-      <Button
-        style={styles.likeButton}
-        accessoryLeft={HeartIcon}
-        onPress={(): void => {
-          Alert.alert('test');
-          console.log(navigation.getCurrentRoute()?.name);
-          navigation.navigate('SignIn3', {});
-        }}>
-        Home4
-      </Button>
-    </View>
-  );
-};
-
-const TestScreen2 = ({navigation}): React.ReactElement => {
-  return (
-    <Button
-      style={styles.likeButton}
-      accessoryLeft={HeartIcon}
-      onPress={() => {
-        navigation.navigate('SignIn2', {});
-      }}>
-      Home2 333
-    </Button>
-  );
 };
