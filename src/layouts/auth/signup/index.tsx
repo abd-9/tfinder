@@ -250,6 +250,10 @@ const themedStyles = StyleService.create({
   },
   tabTitle: {
     color: 'text-control-color',
+    flex: 1,
+    justifyContent: 'center', // Center vertically
+    alignItems: 'center', // Center horizontally
+    textAlign: 'center',
   },
   tabContentContainer: {
     padding: 16,

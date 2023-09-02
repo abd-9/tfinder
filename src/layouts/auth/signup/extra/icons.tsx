@@ -1,6 +1,8 @@
 import React from 'react';
 import {ImageStyle} from 'react-native';
 import {Avatar, Icon, IconElement} from '@ui-kitten/components';
+import SVGImg from '../assets/student-s.svg';
+import TeacherIcon from '../assets/teache.svg';
 
 import StudentPng from '../assets/student-icon.svg';
 export const EmailIcon = (style: ImageStyle): IconElement => (
@@ -19,8 +21,8 @@ export const PlusIcon = (style: ImageStyle): IconElement => (
   <Icon {...style} name="plus" />
 );
 export const StudentIcon = (style: ImageStyle): IconElement => (
-  <Avatar source={require('../assets/student.png')} />
+  <SVGImg width={24} height={24} />
 );
 export const TutorIcon = (style: ImageStyle): IconElement => (
-  <Avatar source={require('../assets/teacher.png')} />
+  <TeacherIcon width={24} height={24} />
 );
