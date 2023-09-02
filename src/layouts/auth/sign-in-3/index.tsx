@@ -1,12 +1,11 @@
-import React, { ReactElement } from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
-import { Button, Input, Text, Icon } from '@ui-kitten/components';
-import { ImageOverlay } from './extra/image-overlay.component';
-import { PersonIcon } from './extra/icons';
-import { KeyboardAvoidingView } from './extra/3rd-party';
+import React, {ReactElement} from 'react';
+import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import {Button, Input, Text, Icon} from '@ui-kitten/components';
+import {ImageOverlay} from './extra/image-overlay.component';
+import {PersonIcon} from './extra/icons';
+import {KeyboardAvoidingView} from './extra/3rd-party';
 
-export default ({ navigation }): React.ReactElement => {
-
+export default ({navigation}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
@@ -39,30 +38,25 @@ export default ({ navigation }): React.ReactElement => {
         style={styles.container}
         source={require('./assets/image-background.jpg')}>
         <View style={styles.headerContainer}>
-          <Text
-            category='h1'
-            status='control'>
+          <Text category="h1" status="control">
             Hello
           </Text>
-          <Text
-            style={styles.signInLabel}
-            category='s1'
-            status='control'>
+          <Text style={styles.signInLabel} category="s1" status="control">
             Sign in to your account
           </Text>
         </View>
         <View style={styles.formContainer}>
           <Input
-            status='control'
-            placeholder='Email'
+            status="control"
+            placeholder="Email"
             accessoryLeft={PersonIcon}
             value={email}
             onChangeText={setEmail}
           />
           <Input
             style={styles.passwordInput}
-            status='control'
-            placeholder='Password'
+            status="control"
+            placeholder="Password"
             accessoryRight={renderPasswordIcon}
             value={password}
             secureTextEntry={!passwordVisible}
@@ -71,8 +65,8 @@ export default ({ navigation }): React.ReactElement => {
           <View style={styles.forgotPasswordContainer}>
             <Button
               style={styles.forgotPasswordButton}
-              appearance='ghost'
-              status='control'
+              appearance="ghost"
+              status="control"
               onPress={onForgotPasswordButtonPress}>
               Forgot your password?
             </Button>
@@ -80,15 +74,15 @@ export default ({ navigation }): React.ReactElement => {
         </View>
         <Button
           style={styles.signInButton}
-          status='control'
-          size='giant'
+          status="control"
+          size="giant"
           onPress={onSignInButtonPress}>
           SIGN IN
         </Button>
         <Button
           style={styles.signUpButton}
-          appearance='ghost'
-          status='control'
+          appearance="ghost"
+          status="control"
           onPress={onSignUpButtonPress}>
           Don't have an account? Sign Up
         </Button>
@@ -132,4 +126,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
 });
-

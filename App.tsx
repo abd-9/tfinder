@@ -61,7 +61,7 @@ export default (): React.ReactElement => {
         <NavigationContainer ref={navigationRef}>
           {/* <SafeAreaProvider>
             <SafeAreaLayout insets="top"> */}
-          <Layout>
+          {/* <Layout>
             <Button
               style={styles.likeButton}
               accessoryLeft={HeartIcon}
@@ -70,8 +70,8 @@ export default (): React.ReactElement => {
               }}>
               LIKE
             </Button>
-          </Layout>
-          <Stack.Navigator>
+          </Layout> */}
+          <Stack.Navigator headerMode="none">
             {/* <Stack.Screen name="Auth" component={AuthMenuNavigator} /> */}
             <Stack.Screen name="Auth" component={AuthNavigator} />
             {/* <Stack.Screen name="SignIn2" component={TestScreen} />

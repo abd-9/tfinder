@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import React, {ReactElement} from 'react';
+import {View, TouchableWithoutFeedback} from 'react-native';
 import {
   Button,
   CheckBox,
@@ -10,15 +10,11 @@ import {
   Text,
   Icon,
 } from '@ui-kitten/components';
-import { ProfileAvatar } from './extra/profile-avatar.component';
-import {
-  EmailIcon,
-  PersonIcon,
-  PlusIcon,
-} from './extra/icons';
-import { KeyboardAvoidingView } from './extra/3rd-party';
+import {ProfileAvatar} from './extra/profile-avatar.component';
+import {EmailIcon, PersonIcon, PlusIcon} from './extra/icons';
+import {KeyboardAvoidingView} from './extra/3rd-party';
 
-export default ({ navigation }): React.ReactElement => {
+export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
@@ -42,8 +38,8 @@ export default ({ navigation }): React.ReactElement => {
   const renderEditAvatarButton = (): React.ReactElement => (
     <Button
       style={styles.editAvatarButton}
-      status='basic' 
-      accessoryRight={PlusIcon} 
+      status="basic"
+      accessoryRight={PlusIcon}
     />
   );
 
@@ -54,12 +50,12 @@ export default ({ navigation }): React.ReactElement => {
   );
 
   const renderCheckboxLabel = React.useCallback(
-    (evaProps) => (
+    evaProps => (
       <Text {...evaProps} style={styles.termsCheckBoxText}>
         I read and agree to Terms & Conditions
       </Text>
     ),
-    []
+    [],
   );
 
   return (
@@ -67,32 +63,32 @@ export default ({ navigation }): React.ReactElement => {
       <View style={styles.headerContainer}>
         <ProfileAvatar
           style={styles.profileAvatar}
-          resizeMode='center'
+          resizeMode="center"
           source={require('./assets/image-person.png')}
           editButton={renderEditAvatarButton}
         />
       </View>
-      <Layout style={styles.formContainer} level='1'>
+      <Layout style={styles.formContainer} level="1">
         <Input
-          autoCapitalize='none'
-          placeholder='User Name'
+          autoCapitalize="none"
+          placeholder="User Name"
           accessoryRight={PersonIcon}
           value={userName}
           onChangeText={setUserName}
         />
         <Input
           style={styles.emailInput}
-          autoCapitalize='none'
-          placeholder='Email'
+          autoCapitalize="none"
+          placeholder="Email"
           accessoryRight={EmailIcon}
           value={email}
           onChangeText={setEmail}
         />
         <Input
           style={styles.passwordInput}
-          autoCapitalize='none'
+          autoCapitalize="none"
           secureTextEntry={!passwordVisible}
-          placeholder='Password'
+          placeholder="Password"
           accessoryRight={renderPasswordIcon}
           value={password}
           onChangeText={setPassword}
@@ -106,14 +102,14 @@ export default ({ navigation }): React.ReactElement => {
       </Layout>
       <Button
         style={styles.signUpButton}
-        size='giant'
+        size="giant"
         onPress={onSignUpButtonPress}>
         SIGN UP
       </Button>
       <Button
         style={styles.signInButton}
-        appearance='ghost'
-        status='basic'
+        appearance="ghost"
+        status="basic"
         onPress={onSignInButtonPress}>
         Already have an account? Sign In
       </Button>
