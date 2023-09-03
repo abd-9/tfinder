@@ -6,7 +6,7 @@ import {SocialGridScreen} from '../scenes/social/social-grid.component';
 import {SocialListScreen} from '../scenes/social/social-list.component';
 import {Feed1Screen} from '../scenes/social/feed-1.component';
 import {Feed2Screen} from '../scenes/social/feed-2.component';
-import {Profile1Screen} from '../scenes/social/profile-1.component';
+import {Profile} from '../scenes/social/profile.component';
 import {Profile2Screen} from '../scenes/social/profile-2.component';
 import {Profile3Screen} from '../scenes/social/profile-3.component';
 import {Profile4Screen} from '../scenes/social/profile-4.component';
@@ -40,7 +40,7 @@ export const SocialNavigator = (): React.ReactElement => (
     <Stack.Screen
       name="Profile"
       initialParams={{id: '0'}}
-      component={Profile1Screen}
+      component={Profile}
     />
     {/* <Stack.Screen name="Profile5" component={Profile5Screen} /> */}
     {/* <Stack.Screen name="Profile6" component={Profile6Screen} /> */}
