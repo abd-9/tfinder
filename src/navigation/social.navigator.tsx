@@ -1,25 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {SocialScreen} from '../scenes/social/social.component';
-import {SocialGridScreen} from '../scenes/social/social-grid.component';
-import {SocialListScreen} from '../scenes/social/social-list.component';
-import {Feed1Screen} from '../scenes/social/feed-1.component';
-import {Feed2Screen} from '../scenes/social/feed-2.component';
 import {Profile} from '../scenes/social/profile.component';
-import {Profile2Screen} from '../scenes/social/profile-2.component';
-import {Profile3Screen} from '../scenes/social/profile-3.component';
-import {Profile4Screen} from '../scenes/social/profile-4.component';
-import {Profile5Screen} from '../scenes/social/profile-5.component';
-import {Profile6Screen} from '../scenes/social/profile-6.component';
-import {Profile7Screen} from '../scenes/social/profile-7.component';
-import {ProfileSettings1Screen} from '../scenes/social/profile-settings-1.component';
-import {ProfileSettings2Screen} from '../scenes/social/profile-settings-2.component';
-import {ProfileSettings3Screen} from '../scenes/social/profile-settings-3.component';
 
-import {Chat1Screen} from '../scenes/messaging/chat-1.component';
-
-const TopTab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 // const SocialMenuNavigator = (): React.ReactElement => (

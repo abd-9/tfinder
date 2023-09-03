@@ -8,6 +8,7 @@ import ContentView from '../../layouts/dashboards/trainings-1';
 export const Trainings1Screen = ({navigation}): React.ReactElement => {
   const onShowMenuPress = () => {
     // TODO: show sidebar menu
+    navigation.toggleDrawer();
   };
   const renderBackAction = (): React.ReactElement => (
     <TopNavigationAction icon={MenuIcon2} onPress={onShowMenuPress} />

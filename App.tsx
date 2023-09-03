@@ -42,12 +42,17 @@ import {SafeAreaLayout} from './src/components/safe-area-layout.component';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {DashboardsNavigator} from './src/navigation/dashboards.navigator';
 import {SocialNavigator} from './src/navigation/social.navigator';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {HomeDrawer} from './src/scenes/home/home-drawer.component';
 // import {createStackNavigator} from '@react-navigation/stack';
 
 /**
  * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
  * https://akveo.github.io/eva-icons
  */
+
+const Drawer = createDrawerNavigator();
+
 const HeartIcon = (
   props?: Partial<ImageProps>,
 ): React.ReactElement<ImageProps> => <Icon {...props} name="heart" />;
@@ -61,28 +66,24 @@ export default (): React.ReactElement => {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer ref={navigationRef}>
-          {/* <SafeAreaProvider>
-            <SafeAreaLayout insets="top"> */}
-          {/* <Layout>
-            <Button
-              style={styles.likeButton}
-              accessoryLeft={HeartIcon}
-              onPress={() => {
-                navigationRef.navigate('SignIn3', {});
-              }}>
-              LIKE
-            </Button>
-          </Layout> */}
-          <Stack.Navigator screenOptions={{headerShown: false}}>
-            {/* <Stack.Screen name="Auth" component={AuthMenuNavigator} /> */}
-            <Stack.Screen name="Profile" component={SocialNavigator} />
-            <Stack.Screen name="Main" component={DashboardsNavigator} />
-            <Stack.Screen name="Auth" component={AuthNavigator} />
-            {/* <Stack.Screen name="SignIn2" component={TestScreen} />
+          {/* 
+          // TODO: check if user has token or not  */}
+          {true ? (
+            <Drawer.Navigator
+              screenOptions={{gestureEnabled: false, headerShown: false}}
+              drawerContent={props => <HomeDrawer {...props} />}>
+              <Drawer.Screen name="Main" component={DashboardsNavigator} />
+              <Drawer.Screen name="Profile" component={SocialNavigator} />
+            </Drawer.Navigator>
+          ) : (
+            <Stack.Navigator screenOptions={{headerShown: false}}>
+              <Stack.Screen name="Auth" component={AuthNavigator} />
+            </Stack.Navigator>
+          )}
+
+          {/* <Stack.Screen name="SignIn2" component={TestScreen} />
             <Stack.Screen name="SignIn3" component={TestScreen2} /> */}
-          </Stack.Navigator>
-          {/* </SafeAreaLayout> */}
-          {/* </SafeAreaProvider> */}
+          {/* </Stack.Navigator> */}
         </NavigationContainer>
       </ApplicationProvider>
     </>
@@ -102,7 +103,3 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
 });
-
-type TestScreenProps = {
-  navigation: NavigationContainerRefWithCurrent<ReactNavigation.RootParamList>;
-};

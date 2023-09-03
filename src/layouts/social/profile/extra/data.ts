@@ -78,3 +78,32 @@ export class Like {
     return new Like(Profile.jenniferGreen());
   }
 }
+export class Comment {
+  constructor(
+    readonly text: string,
+    readonly date: string,
+    readonly author: Profile,
+    readonly comments: Comment[],
+    readonly likes: Like[],
+  ) {}
+
+  static byHubertFranck(): Comment {
+    return new Comment(
+      'This very useful information for me Thanks for your article!',
+      'Today 11:10 am',
+      Profile.jenniferGreen(),
+      [Comment.byMarkVolter()],
+      [Like.byAlexaTenorio()],
+    );
+  }
+
+  static byMarkVolter(): Comment {
+    return new Comment(
+      'Thanks!',
+      'Today 11:10 am',
+      Profile.jenniferGreen(),
+      [],
+      [],
+    );
+  }
+}

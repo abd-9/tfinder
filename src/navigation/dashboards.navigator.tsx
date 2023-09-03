@@ -11,13 +11,6 @@ import {SettingsScreen} from '../scenes/dashboards/settings.component';
 const TopTab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-const DashboardsMenuNavigator = (): React.ReactElement => (
-  <TopTab.Navigator tabBar={props => <DashboardScreen {...props} />}>
-    <TopTab.Screen name="DashboardGrid" component={DashboardGridScreen} />
-    <TopTab.Screen name="DashboardList" component={DashboardsListScreen} />
-  </TopTab.Navigator>
-);
-
 export const DashboardsNavigator = (): React.ReactElement => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
     {/* <Stack.Screen name="Dashboards" component={DashboardsMenuNavigator} /> */}
