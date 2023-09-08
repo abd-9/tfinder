@@ -19,11 +19,11 @@ import {
   Text,
 } from '@ui-kitten/components';
 import {ProfileSocial} from './extra/profile-social.component';
-import {HeartIcon} from './extra/icons';
 import {Comment, Post, Profile} from './extra/data';
 import {RateBar} from './extra/rate-bar.component';
 import {CommentItem} from './extra/comment-list.component';
 import {Article} from '../../articles/article-3/extra/data';
+import {StarIcon} from '../../../components/icons';
 
 const profile: Profile = Profile.jenniferGreen();
 
@@ -72,7 +72,7 @@ export default ({navigation}): React.ReactElement => {
           <View style={styles.profileSocialsContainer}>
             <ProfileSocial
               style={styles.profileSocialContainer}
-              hint="Followers"
+              hint="Sessions"
               value={`${profile.followers}`}
             />
             <ProfileSocial
@@ -86,8 +86,11 @@ export default ({navigation}): React.ReactElement => {
               value={`${profile.posts}`}
             />
           </View>
-          <Button style={styles.followButton} onPress={onFollowButtonPress}>
-            FOLLOW
+          <Button
+            style={styles.followButton}
+            onPress={onFollowButtonPress}
+            accessoryRight={StarIcon}>
+            Rate it
           </Button>
           <View style={styles.buttons}>
             <TabBar

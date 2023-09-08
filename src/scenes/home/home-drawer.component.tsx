@@ -32,7 +32,7 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
       onPress: () => {
         navigation.toggleDrawer();
         // TODO: do logout and redirect it back to login page
-        navigation.navigate('Main');
+        navigation.navigate('Auth');
       },
     },
     // {

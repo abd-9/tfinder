@@ -72,7 +72,10 @@ export default ({navigation}): React.ReactElement => {
           </Button>
         </View>
       </Layout>
-      <Button style={styles.signInButton} size="giant">
+      <Button
+        onPress={() => navigation.navigate('Main')}
+        style={styles.signInButton}
+        size="giant">
         SIGN IN
       </Button>
       <Button

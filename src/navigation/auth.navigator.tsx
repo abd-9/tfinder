@@ -21,8 +21,8 @@ const Stack = createStackNavigator();
 export const AuthNavigator = (): React.ReactElement => (
   // <ForgotPasswordScreen navigation={{}} />
   <Stack.Navigator headerMode="none">
-    <Stack.Screen name="SignUp" component={SignUpScreen} />
     <Stack.Screen name="SignIn" component={SignIn2Screen} />
+    <Stack.Screen name="SignUp" component={SignUpScreen} />
     {/*  // <Stack.Screen name="SignIn4" component={SignIn4Screen} />
     <Stack.Screen name="SignUp1" component={SignUp1Screen} />
     <Stack.Screen name="SignUp3" component={SignUp3Screen} />
