@@ -18,6 +18,7 @@ import {HomeDrawer} from './src/scenes/home/home-drawer.component';
 import store from './src/store';
 import {ToastProvider} from 'react-native-toast-notifications';
 import {selectUserData} from './src/store/users';
+import {ProfileNavigator} from './src/navigation/profile.navigator';
 
 // import Toast from 'react-native-toast-message';
 // import {createStackNavigator} from '@react-navigation/stack';
@@ -50,6 +51,7 @@ const RoutRender = ({Stack}) => {
       drawerContent={props => <HomeDrawer {...props} />}>
       <Drawer.Screen name="Main" component={DashboardsNavigator} />
       <Drawer.Screen name="Profile" component={SocialNavigator} />
+      <Drawer.Screen name="ProfileSettings" component={ProfileNavigator} />
     </Drawer.Navigator>
   ) : (
     <Stack.Navigator screenOptions={{headerShown: false}}>

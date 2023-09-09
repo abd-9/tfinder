@@ -14,3 +14,19 @@ export async function getTutorIdApi(tutorId: string) {
     throw Error(error);
   }
 }
+
+export async function updateTutorIdApi(
+  tutorId: string,
+  tutor: ITutor,
+  dispatch: any,
+) {
+  try {
+    const response = await ApiClient.put<ITutor>(`/tutors/${tutorId}`, tutor);
+    console.log('dddd', response);
+    dispatch(reduxUserActions.setProfileData(response.data));
+    return {...response.data};
+  } catch (error) {
+    // console.error('Login - Error: ', error?.data?.message);
+    throw Error(error);
+  }
+}

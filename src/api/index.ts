@@ -10,7 +10,10 @@ const ApiClient = axios.create({
 });
 
 export const setAuthorizationHeader = async (_token?: string) => {
-  const token = await AppStorage.getToken();
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGZjM2ZhYzU2NjVlYTRmMjRjNTRiYzciLCJ0dXRvcklkIjoiNjRmYzNmYWM1NjY1ZWE0ZjI0YzU0YmM5Iiwic3R1ZGVudElkIjoiIiwiaWF0IjoxNjk0Mjg4MzM4LCJleHAiOjUyOTQyODgzMzh9.FwnR1QLdr_PGHERqw05PBkhhH2YIWsD3OzNDtE1vDnU';
+
+  //await AppStorage.getToken();
 
   if (_token || token) {
     // ApiClient.headers.setAuthorization(`Bearer ${token}`);

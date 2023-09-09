@@ -17,7 +17,7 @@ export const DashboardsNavigator = (): React.ReactElement => {
 
     if (userData.tutorId) getTutorIdApi(userData.tutorId);
     if (userData.studentId) getStudentByIdApi(userData.studentId);
-  }, []);
+  }, [userData.token]);
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>

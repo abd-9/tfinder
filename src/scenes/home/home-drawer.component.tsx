@@ -59,7 +59,7 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
       <Pressable
         onPress={() => {
           navigation.toggleDrawer();
-          navigation.navigate('Profile');
+          navigation.navigate('ProfileSettings');
         }}>
         <View style={styles.profileContainer}>
           <Avatar

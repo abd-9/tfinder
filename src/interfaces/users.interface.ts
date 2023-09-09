@@ -2,7 +2,7 @@ import {IRequest} from './request.interface';
 
 export interface IUser {
   _id?: string;
-  email: string;
+  email?: string;
   password?: string;
   name?: string;
   type?: USER_TYPE;
@@ -25,8 +25,9 @@ export interface ITutor extends IUser {
   _id?: string;
   flexibility?: boolean;
   cities?: [string];
-  country?: [string];
+  country?: string;
   location?: string;
+  phone?: string;
   rate?: number;
   subjectsTaught?: string[];
   qualifications?: string[];

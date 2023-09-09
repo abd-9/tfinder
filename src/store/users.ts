@@ -20,7 +20,7 @@ const usersSlice = createSlice({
       loading: false,
     }),
     userData: {} as IUser & IAuth,
-    profile: {} as ITutor | IStudent,
+    profile: {} as ITutor & IStudent,
   },
   reducers: {
     setUserData: (state, action) => {
@@ -55,5 +55,5 @@ export const {
 export default usersSlice.reducer;
 export const reduxUserActions = usersSlice.actions;
 const selectUserData = (state: RootState) => state.user.userData;
-const selectUserProfile = (state: RootState) => state.user.userData;
+const selectUserProfile = (state: RootState) => state.user.profile;
 export {selectUserData, selectUserProfile};
