@@ -3,9 +3,14 @@ import {IRequest} from './request.interface';
 export interface IUser {
   _id?: string;
   email: string;
-  password: string;
-  name: string;
-  type: USER_TYPE;
+  password?: string;
+  name?: string;
+  type?: USER_TYPE;
+}
+
+export interface IAuth {
+  _id?: string;
+  token: string;
 }
 
 export enum USER_TYPE {

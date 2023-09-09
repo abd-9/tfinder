@@ -1,5 +1,5 @@
 import React, {ReactElement} from 'react';
-import {View, TouchableWithoutFeedback} from 'react-native';
+import {View, TouchableWithoutFeedback, ToastAndroid} from 'react-native';
 import {
   Button,
   Input,
@@ -11,13 +11,32 @@ import {
 } from '@ui-kitten/components';
 import {PersonIcon} from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
+import {Toast} from 'react-native-toast-notifications';
+import {IUser, USER_TYPE} from '../../../interfaces/users.interface';
+import {LoginSchema, SignupTutorSchema} from '../signup/extra/helper';
+import {useFormik} from 'formik';
+import {createTutorApi} from '../../../api/tutor';
+import {loginApi} from '../../../api/auth';
+import {useDispatch} from 'react-redux';
+import {reduxUserActions} from '../../../store/users';
 
 export default ({navigation}): React.ReactElement => {
-  const [email, setEmail] = React.useState<string>();
-  const [password, setPassword] = React.useState<string>();
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const styles = useStyleSheet(themedStyles);
+  const onSubmit = (values: IUser) => {
+    loginApi(values).then(res => {
+      Toast.show('Success!', {type: 'success'});
+      dispatch(reduxUserActions.setUserData(res));
+      navigation && navigation.navigate('Main');
+    });
+  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema: LoginSchema,
+    onSubmit,
+  });
 
   const onSignUpButtonPress = (): void => {
     navigation && navigation.navigate('SignUp');
@@ -51,16 +70,27 @@ export default ({navigation}): React.ReactElement => {
         <Input
           placeholder="Email"
           accessoryRight={PersonIcon}
-          value={email}
-          onChangeText={setEmail}
+          onChangeText={formik.handleChange('email')}
+          onBlur={formik.handleBlur('email')}
+          name="email"
+          value={formik.values.email}
+          status={
+            formik.touched.email && formik.errors.email ? 'danger' : 'basic'
+          }
         />
         <Input
           style={styles.passwordInput}
           placeholder="Password"
           accessoryRight={renderPasswordIcon}
-          value={password}
-          secureTextEntry={!passwordVisible}
-          onChangeText={setPassword}
+          secureTextEntry={!formik.values.password}
+          onChangeText={formik.handleChange('password')}
+          onBlur={formik.handleBlur('password')}
+          status={
+            formik.touched.password && formik.errors.password
+              ? 'danger'
+              : 'basic'
+          }
+          value={formik.values.password}
         />
         <View style={styles.forgotPasswordContainer}>
           <Button
@@ -73,7 +103,7 @@ export default ({navigation}): React.ReactElement => {
         </View>
       </Layout>
       <Button
-        onPress={() => navigation.navigate('Main')}
+        onPress={() => formik.handleSubmit()}
         style={styles.signInButton}
         size="giant">
         SIGN IN
@@ -125,3 +155,9 @@ const themedStyles = StyleService.create({
     paddingHorizontal: 0,
   },
 });
+const initialValues: IUser = {
+  name: '',
+  email: '',
+  password: '',
+  type: USER_TYPE.STUDENT,
+};

@@ -19,20 +19,25 @@ import {
   TutorIcon,
 } from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
-import {USER_TYPE} from '../../../interfaces/users.interface';
+import {IUser, USER_TYPE} from '../../../interfaces/users.interface';
 import {useFormik} from 'formik';
 import {SignupTutorSchema} from './extra/helper';
+import {createTutorApi} from '../../../api/tutor';
+import {Toast} from 'react-native-toast-notifications';
 
 export default ({navigation}): React.ReactElement => {
-  const [selectedUserType, seSelectedUserType] = React.useState<USER_TYPE>(
-    USER_TYPE.STUDENT,
-  );
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
   const styles = useStyleSheet(themedStyles);
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
+  const onSubmit = (values: IUser) => {
+    createTutorApi(values)
+      .then(() => {
+        Toast.show('User created!', {type: 'success'});
 
-    navigation && navigation.goBack();
+        navigation && navigation.goBack();
+      })
+      .catch(ee => {
+        Toast.show(ee.message, {type: 'danger'});
+      });
   };
 
   const formik = useFormik({
@@ -40,10 +45,6 @@ export default ({navigation}): React.ReactElement => {
     validationSchema: SignupTutorSchema,
     onSubmit,
   });
-
-  const onSignUpButtonPress = (): void => {
-    navigation && navigation.goBack();
-  };
 
   const onSignInButtonPress = (): void => {
     navigation && navigation.navigate('SignIn');
@@ -70,15 +71,15 @@ export default ({navigation}): React.ReactElement => {
         /> */}
         <Button
           style={styles.editAvatarButton}
-          onPress={() => seSelectedUserType(USER_TYPE.STUDENT)}
-          status={selectedUserType == USER_TYPE.STUDENT ? 'basic' : 'ghost'}
+          onPress={() => formik.setFieldValue('type', USER_TYPE.STUDENT)}
+          status={formik.values.type == USER_TYPE.STUDENT ? 'basic' : 'ghost'}
           accessoryLeft={TutorIcon}>
           Tutor
         </Button>
         <Button
           style={styles.editAvatarButton}
-          onPress={() => seSelectedUserType(USER_TYPE.TUTOR)}
-          status={selectedUserType == USER_TYPE.TUTOR ? 'basic' : 'ghost'}
+          onPress={() => formik.setFieldValue('type', USER_TYPE.TUTOR)}
+          status={formik.values.type == USER_TYPE.TUTOR ? 'basic' : 'ghost'}
           accessoryLeft={StudentIcon}>
           Student
         </Button>
@@ -88,14 +89,14 @@ export default ({navigation}): React.ReactElement => {
           autoCapitalize="none"
           placeholder="Name"
           accessoryRight={PersonIcon}
-          status={formik.touched.name && formik.errors.name ? 'danger' : ''}
+          // status={formik.touched.name && formik.errors.name ? 'danger' : ''}
           onChangeText={formik.handleChange('name')}
           onBlur={formik.handleBlur('name')}
           value={formik.values.name}
         />
         <Input
           style={styles.emailInput}
-          status={formik.touched.email && formik.errors.email ? 'danger' : ''}
+          // status={formik.touched.email && formik.errors.email ? 'danger' : ''}
           placeholder="Email"
           accessoryRight={EmailIcon}
           onChangeText={formik.handleChange('email')}
@@ -105,10 +106,10 @@ export default ({navigation}): React.ReactElement => {
         <Input
           style={styles.passwordInput}
           autoCapitalize="none"
-          status={
-            formik.touched.password && formik.errors.password ? 'danger' : ''
-          }
-          secureTextEntry={!passwordVisible}
+          // status={
+          //   formik.touched.password && formik.errors.password ? 'danger' : ''
+          // }
+          secureTextEntry={!formik.values.password}
           placeholder="Password"
           accessoryRight={renderPasswordIcon}
           onChangeText={formik.handleChange('password')}
@@ -188,14 +189,10 @@ const themedStyles = StyleService.create({
     marginHorizontal: 16,
   },
 });
-interface FormValues {
-  name: string;
-  email: string;
-  password: string;
-}
 
-const initialValues: FormValues = {
+const initialValues: IUser = {
   name: '',
   email: '',
   password: '',
+  type: USER_TYPE.STUDENT,
 };
