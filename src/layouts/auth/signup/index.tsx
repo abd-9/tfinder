@@ -2,91 +2,56 @@ import React, {ReactElement} from 'react';
 import {View, TouchableWithoutFeedback} from 'react-native';
 import {
   Button,
+  CheckBox,
   Input,
+  Layout,
   StyleService,
-  Tab,
-  TabView,
-  Text,
   useStyleSheet,
+  Text,
   Icon,
 } from '@ui-kitten/components';
-import {ImageOverlay} from './extra/image-overlay.component';
+import {ProfileAvatar} from './extra/profile-avatar.component';
 import {
   EmailIcon,
   PersonIcon,
-  PhoneIcon,
   PlusIcon,
   StudentIcon,
   TutorIcon,
 } from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
-import SvgUri from 'react-native-svg-uri';
+import {USER_TYPE} from '../../../interfaces/users.interface';
+import {useFormik} from 'formik';
+import {SignupTutorSchema} from './extra/helper';
 
 export default ({navigation}): React.ReactElement => {
-  const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);
-  const [email, setEmail] = React.useState<string>();
-  const [password, setPassword] = React.useState<string>();
+  const [selectedUserType, seSelectedUserType] = React.useState<USER_TYPE>(
+    USER_TYPE.STUDENT,
+  );
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
-  const [phoneNumber, setPhoneNumber] = React.useState<string>();
-  const [smsCode, setSMSCode] = React.useState<string>();
-  const [smsCodeVisible, setSMSCodeVisible] = React.useState<boolean>(false);
-
   const styles = useStyleSheet(themedStyles);
+  const onSubmit = (values: FormValues) => {
+    console.log(values);
+
+    navigation && navigation.goBack();
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: SignupTutorSchema,
+    onSubmit,
+  });
+
+  const onSignUpButtonPress = (): void => {
+    navigation && navigation.goBack();
+  };
 
   const onSignInButtonPress = (): void => {
     navigation && navigation.navigate('SignIn');
   };
 
-  const onSignUpButtonPress = (): void => {
-    // TODO: login api call
-    navigation && navigation.navigate('SignUp4');
-  };
-
   const onPasswordIconPress = (): void => {
     setPasswordVisible(!passwordVisible);
   };
-
-  const onSMSCodeIconPress = (): void => {
-    setSMSCodeVisible(!smsCodeVisible);
-  };
-
-  const renderIconPassword = (props): ReactElement => (
-    <TouchableWithoutFeedback onPress={onPasswordIconPress}>
-      <Icon {...props} name="lock" />
-    </TouchableWithoutFeedback>
-  );
-
-  const renderIconSMS = (props): ReactElement => (
-    <TouchableWithoutFeedback onPress={onSMSCodeIconPress}>
-      <Icon {...props} name="lock" />
-    </TouchableWithoutFeedback>
-  );
-
-  const renderTabEmailTitle = React.useCallback(
-    evaProps => (
-      <Text {...evaProps} style={styles.tabTitle}>
-        <StudentIcon /> Student
-      </Text>
-    ),
-    [],
-  );
-
-  const renderTabSMSTitle = React.useCallback(
-    evaProps => (
-      <Text {...evaProps} style={styles.tabTitle}>
-        <TutorIcon /> Tutor
-      </Text>
-    ),
-    [],
-  );
-
-  const renderEditAvatarButton = (): React.ReactElement => (
-    <Button
-      style={styles.editAvatarButton}
-      status="basic"
-      accessoryRight={PlusIcon}
-    />
-  );
 
   const renderPasswordIcon = (props): ReactElement => (
     <TouchableWithoutFeedback onPress={onPasswordIconPress}>
@@ -95,136 +60,112 @@ export default ({navigation}): React.ReactElement => {
   );
 
   return (
-    <KeyboardAvoidingView>
-      <ImageOverlay
-        style={styles.headerContainer1}
-        // source={require('./assets/image-background.jpg')}>
-      >
-        <View style={styles.headerContainer}>
-          <Text
-            style={styles.helloLabel}
-            accessoryRight={PersonIcon}
-            status="control">
-            Sign up
-          </Text>
-
-          <Text style={styles.signInLabel} category="s1" status="control">
-            Sign up now using your email
-          </Text>
-        </View>
-        <TabView
-          style={styles.tabView}
-          tabBarStyle={styles.tabBar}
-          indicatorStyle={styles.tabViewIndicator}
-          selectedIndex={selectedTabIndex}
-          onSelect={setSelectedTabIndex}>
-          <Tab title={renderTabEmailTitle}>
-            <View style={styles.tabContentContainer}>
-              <View style={styles.tabContentContainer}>
-                <Input
-                  autoCapitalize="none"
-                  style={styles.formInput}
-                  placeholder="User Name"
-                  accessoryRight={PersonIcon}
-                  status="control"
-                  // value={userName}
-                  // onChangeText={setUserName}
-                />
-                <Input
-                  style={styles.emailInput}
-                  autoCapitalize="none"
-                  status="control"
-                  placeholder="Email"
-                  accessoryRight={EmailIcon}
-                  value={email}
-                  onChangeText={setEmail}
-                />
-                <Input
-                  style={styles.passwordInput}
-                  autoCapitalize="none"
-                  status="control"
-                  secureTextEntry={!passwordVisible}
-                  placeholder="Password"
-                  accessoryRight={renderPasswordIcon}
-                  value={password}
-                  onChangeText={setPassword}
-                />
-              </View>
-            </View>
-          </Tab>
-          <Tab title={renderTabSMSTitle}>
-            <View>
-              <View style={styles.tabContentContainer}>
-                <Input
-                  autoCapitalize="none"
-                  style={styles.formInput}
-                  placeholder="User Name"
-                  accessoryRight={PersonIcon}
-                  status="control"
-                  // value={userName}
-                  // onChangeText={setUserName}
-                />
-                <Input
-                  style={styles.emailInput}
-                  autoCapitalize="none"
-                  status="control"
-                  placeholder="Email"
-                  accessoryRight={EmailIcon}
-                  value={email}
-                  onChangeText={setEmail}
-                />
-                <Input
-                  style={styles.passwordInput}
-                  autoCapitalize="none"
-                  status="control"
-                  secureTextEntry={!passwordVisible}
-                  placeholder="Password"
-                  accessoryRight={renderPasswordIcon}
-                  value={password}
-                  onChangeText={setPassword}
-                />
-              </View>
-              <Text style={styles.smsCaptionLabel} appearance="hint">
-                Use the email and password to login to your account.
-              </Text>
-            </View>
-          </Tab>
-        </TabView>
+    <KeyboardAvoidingView style={styles.container}>
+      <View style={styles.headerContainer}>
+        {/* <ProfileAvatar
+          style={styles.profileAvatar}
+          resizeMode="center"
+          source={require('./assets/image-person.png')}
+          editButton={renderEditAvatarButton}
+        /> */}
         <Button
-          style={styles.signInButton}
-          size="giant"
-          onPress={onSignUpButtonPress}>
-          SIGN UP
+          style={styles.editAvatarButton}
+          onPress={() => seSelectedUserType(USER_TYPE.STUDENT)}
+          status={selectedUserType == USER_TYPE.STUDENT ? 'basic' : 'ghost'}
+          accessoryLeft={TutorIcon}>
+          Tutor
         </Button>
         <Button
-          style={styles.signUpButton}
-          appearance="ghost"
-          status="control"
-          onPress={onSignInButtonPress}>
-          Already have an account? Sign In
+          style={styles.editAvatarButton}
+          onPress={() => seSelectedUserType(USER_TYPE.TUTOR)}
+          status={selectedUserType == USER_TYPE.TUTOR ? 'basic' : 'ghost'}
+          accessoryLeft={StudentIcon}>
+          Student
         </Button>
-      </ImageOverlay>
+      </View>
+      <Layout style={styles.formContainer} level="1">
+        <Input
+          autoCapitalize="none"
+          placeholder="Name"
+          accessoryRight={PersonIcon}
+          status={formik.touched.name && formik.errors.name ? 'danger' : ''}
+          onChangeText={formik.handleChange('name')}
+          onBlur={formik.handleBlur('name')}
+          value={formik.values.name}
+        />
+        <Input
+          style={styles.emailInput}
+          status={formik.touched.email && formik.errors.email ? 'danger' : ''}
+          placeholder="Email"
+          accessoryRight={EmailIcon}
+          onChangeText={formik.handleChange('email')}
+          onBlur={formik.handleBlur('email')}
+          value={formik.values.email}
+        />
+        <Input
+          style={styles.passwordInput}
+          autoCapitalize="none"
+          status={
+            formik.touched.password && formik.errors.password ? 'danger' : ''
+          }
+          secureTextEntry={!passwordVisible}
+          placeholder="Password"
+          accessoryRight={renderPasswordIcon}
+          onChangeText={formik.handleChange('password')}
+          onBlur={formik.handleBlur('password')}
+          value={formik.values.password}
+        />
+      </Layout>
+      <Button
+        style={styles.signUpButton}
+        size="giant"
+        onPress={() => formik.handleSubmit()}>
+        SIGN UP
+      </Button>
+      <Button
+        style={styles.signInButton}
+        appearance="ghost"
+        status="basic"
+        onPress={onSignInButtonPress}>
+        Already have an account? Sign In
+      </Button>
     </KeyboardAvoidingView>
   );
 };
 
 const themedStyles = StyleService.create({
   container: {
-    flex: 1,
+    backgroundColor: 'background-basic-color-1',
   },
   headerContainer: {
-    minHeight: 216,
-    paddingHorizontal: 64,
     justifyContent: 'center',
     alignItems: 'center',
+    minHeight: 216,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 4,
+    columnGap: 4,
+    flexGap: 4,
+    backgroundColor: 'color-primary-default',
   },
-  helloLabel: {
-    fontSize: 26,
-    lineHeight: 32,
+  profileAvatar: {
+    width: 116,
+    height: 116,
+    borderRadius: 58,
+    alignSelf: 'center',
+    backgroundColor: 'background-basic-color-1',
+    tintColor: 'color-primary-default',
   },
-  signInLabel: {
-    marginTop: 8,
-    textAlign: 'center',
+  editAvatarButton: {
+    width: 150,
+    height: 75,
+    borderRadius: 20,
+    marginHorizontal: 16,
+  },
+  formContainer: {
+    flex: 1,
+    paddingTop: 32,
+    paddingHorizontal: 16,
   },
   emailInput: {
     marginTop: 16,
@@ -239,45 +180,22 @@ const themedStyles = StyleService.create({
     color: 'text-hint-color',
     marginLeft: 10,
   },
-  tabView: {
-    flex: 1,
-  },
-  tabBar: {
-    backgroundColor: 'transparent',
-  },
-  tabViewIndicator: {
-    backgroundColor: 'text-control-color',
-  },
-  tabTitle: {
-    color: 'text-control-color',
-    flex: 1,
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
-    textAlign: 'center',
-  },
-  tabContentContainer: {
-    padding: 16,
-  },
-  formInput: {
-    marginTop: 16,
-  },
-  smsCaptionLabel: {
-    textAlign: 'center',
-    paddingHorizontal: 32,
-  },
-  signInButton: {
+  signUpButton: {
     marginHorizontal: 16,
   },
-  signUpButton: {
+  signInButton: {
     marginVertical: 12,
     marginHorizontal: 16,
   },
-  editAvatarButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  headerContainer1: {
-    backgroundColor: 'color-primary-default',
-  },
 });
+interface FormValues {
+  name: string;
+  email: string;
+  password: string;
+}
+
+const initialValues: FormValues = {
+  name: '',
+  email: '',
+  password: '',
+};

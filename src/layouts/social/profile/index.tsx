@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Alert,
-  ImageBackground,
-  ListRenderItemInfo,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
 import {
   Avatar,
   Button,

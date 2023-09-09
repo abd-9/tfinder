@@ -22,4 +22,3 @@ export const KeyboardAvoidingView = (props): React.ReactElement => {
     ...props,
   });
 };
-

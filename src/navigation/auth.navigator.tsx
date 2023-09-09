@@ -23,10 +23,7 @@ export const AuthNavigator = (): React.ReactElement => (
   <Stack.Navigator headerMode="none">
     <Stack.Screen name="SignIn" component={SignIn2Screen} />
     <Stack.Screen name="SignUp" component={SignUpScreen} />
-    {/*  // <Stack.Screen name="SignIn4" component={SignIn4Screen} />
-    <Stack.Screen name="SignUp1" component={SignUp1Screen} />
-    <Stack.Screen name="SignUp3" component={SignUp3Screen} />
-    <Stack.Screen name="SignUp4" component={SignUp4Screen} />  */}
+
     <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
   </Stack.Navigator>
 );

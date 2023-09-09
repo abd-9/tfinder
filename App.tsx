@@ -62,9 +62,10 @@ export default (): React.ReactElement => {
           <Drawer.Navigator
             screenOptions={{gestureEnabled: false, headerShown: false}}
             drawerContent={props => <HomeDrawer {...props} />}>
+            <Stack.Screen name="Auth" component={AuthNavigator} />
+
             <Drawer.Screen name="Main" component={DashboardsNavigator} />
             <Drawer.Screen name="Profile" component={SocialNavigator} />
-            <Stack.Screen name="Auth" component={AuthNavigator} />
           </Drawer.Navigator>
           {/* ) : ( */}
           {/* <Stack.Navigator screenOptions={{headerShown: false}}> */}
