@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
@@ -15,8 +15,9 @@ import {DashboardsNavigator} from './src/navigation/dashboards.navigator';
 import {SocialNavigator} from './src/navigation/social.navigator';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {HomeDrawer} from './src/scenes/home/home-drawer.component';
-import {store} from './src/store';
+import store from './src/store';
 import {ToastProvider} from 'react-native-toast-notifications';
+import {selectUserData} from './src/store/users';
 
 // import Toast from 'react-native-toast-message';
 // import {createStackNavigator} from '@react-navigation/stack';
@@ -33,17 +34,26 @@ export default (): React.ReactElement => {
       <ApplicationProvider {...eva} theme={eva.light}>
         <ToastProvider>
           <NavigationContainer ref={navigationRef}>
-            <Drawer.Navigator
-              screenOptions={{gestureEnabled: false, headerShown: false}}
-              drawerContent={props => <HomeDrawer {...props} />}>
-              <Stack.Screen name="Auth" component={AuthNavigator} />
-
-              <Drawer.Screen name="Main" component={DashboardsNavigator} />
-              <Drawer.Screen name="Profile" component={SocialNavigator} />
-            </Drawer.Navigator>
+            <RoutRender Stack={Stack} />
           </NavigationContainer>
         </ToastProvider>
       </ApplicationProvider>
     </Provider>
+  );
+};
+const RoutRender = ({Stack}) => {
+  const userData = useSelector(selectUserData);
+
+  return userData.token ? (
+    <Drawer.Navigator
+      screenOptions={{gestureEnabled: false, headerShown: false}}
+      drawerContent={props => <HomeDrawer {...props} />}>
+      <Drawer.Screen name="Main" component={DashboardsNavigator} />
+      <Drawer.Screen name="Profile" component={SocialNavigator} />
+    </Drawer.Navigator>
+  ) : (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Auth" component={AuthNavigator} />
+    </Stack.Navigator>
   );
 };

@@ -11,11 +11,17 @@ import {
   IndexPath,
 } from '@ui-kitten/components';
 import {BookIcon, GithubIcon, PowerIcon} from '../../components/icons';
+import {reduxUserActions, selectUserData} from '../../store/users';
+import {logout} from '../../api/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {USER_TYPE} from '../../interfaces/users.interface';
 // import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 // import {WebBrowserService} from '../../services/web-browser.service';
 
 export const HomeDrawer = ({navigation}): DrawerElement => {
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(null);
+  const dispatch = useDispatch();
+  const userData = useSelector(selectUserData);
 
   const DATA = [
     {
@@ -31,7 +37,7 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
       icon: PowerIcon,
       onPress: () => {
         navigation.toggleDrawer();
-        // TODO: do logout and redirect it back to login page
+        logout(dispatch);
         navigation.navigate('Auth');
       },
     },
@@ -58,10 +64,14 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
         <View style={styles.profileContainer}>
           <Avatar
             size="giant"
-            source={require('../../assets/images/image-app-icon.png')}
+            source={
+              userData.type == USER_TYPE.TUTOR
+                ? require('../../assets/img/teacher.png')
+                : require('../../assets/img/student.png')
+            }
           />
           <Text style={styles.profileName} category="h6">
-            Abdalkareem Ataya
+            {userData.name}
           </Text>
         </View>
       </Pressable>

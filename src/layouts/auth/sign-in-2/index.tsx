@@ -17,19 +17,20 @@ import {LoginSchema, SignupTutorSchema} from '../signup/extra/helper';
 import {useFormik} from 'formik';
 import {createTutorApi} from '../../../api/tutor';
 import {loginApi} from '../../../api/auth';
-import {useDispatch} from 'react-redux';
-import {reduxUserActions} from '../../../store/users';
+import {useDispatch, useSelector} from 'react-redux';
+import {reduxUserActions, selectUserData} from '../../../store/users';
 
 export default ({navigation}): React.ReactElement => {
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
   const dispatch = useDispatch();
-
   const styles = useStyleSheet(themedStyles);
+  const userData = useSelector(selectUserData);
+
   const onSubmit = (values: IUser) => {
     loginApi(values).then(res => {
       Toast.show('Success!', {type: 'success'});
       dispatch(reduxUserActions.setUserData(res));
-      navigation && navigation.navigate('Main');
+      // navigation && navigation.navigate('Main');
     });
   };
   const formik = useFormik({

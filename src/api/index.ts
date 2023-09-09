@@ -9,9 +9,14 @@ const ApiClient = axios.create({
   },
 });
 
-export const setAuthorizationHeader = async () => {
+export const setAuthorizationHeader = async (_token?: string) => {
   const token = await AppStorage.getToken();
-  ApiClient.defaults.headers.common['Authorization'] = token;
+
+  if (_token || token) {
+    // ApiClient.headers.setAuthorization(`Bearer ${token}`);
+    ApiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    ApiClient.defaults.headers['Authorization'] = `Bearer ${token}`;
+  }
 };
 
 setAuthorizationHeader();
@@ -52,3 +57,8 @@ ApiClient.interceptors.response.use(
     });
   },
 );
+ApiClient.interceptors.request.use(req => {
+  console.log('request', req.url);
+  console.log('request', req);
+  return req;
+});

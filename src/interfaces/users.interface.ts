@@ -6,6 +6,8 @@ export interface IUser {
   password?: string;
   name?: string;
   type?: USER_TYPE;
+  studentId?: string;
+  tutorId?: string;
 }
 
 export interface IAuth {
