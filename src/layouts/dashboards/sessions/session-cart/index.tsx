@@ -10,21 +10,21 @@ import {
 import {RequestItem} from './extra/cart-item.component';
 import {useDispatch, useSelector} from 'react-redux';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
-import {IRequest, REQUEST_STATUS} from '../../../interfaces/request.interface';
-import {acceptRequestApi, updateRequestStatusApi} from '../../../api/tutor';
 import {Toast} from 'react-native-toast-notifications';
+import {
+  IRequest,
+  REQUEST_STATUS,
+} from '../../../../interfaces/request.interface';
+import {acceptRequestApi, updateRequestStatusApi} from '../../../../api/tutor';
+import {selectUserRequests} from '../../../../store/users';
 
-export default ({
-  requestList,
-  fetchMyRequests,
-}: {
+export default ({}: {
   navigation: NavigationProp<ParamListBase>;
   requestList: IRequest[];
-  fetchMyRequests: any;
 }): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
   const dispatch = useDispatch();
-
+  const requestsList = useSelector(selectUserRequests);
   const onRequestRespnse = async (
     status: REQUEST_STATUS,
     reqeust: IRequest,
@@ -32,20 +32,20 @@ export default ({
     if (status == REQUEST_STATUS.ACCEPTED)
       await acceptRequestApi(reqeust._id).then(() => {
         Toast.show('Success', {type: 'success'});
-        fetchMyRequests();
+        // fetchMyRequests();
       });
     else {
       await updateRequestStatusApi(reqeust._id, status).then(() => {
         Toast.show('Success', {type: 'success'});
-        fetchMyRequests();
+        // fetchMyRequests();
       });
     }
   };
 
   const renderFooter = (): React.ReactElement => (
     <Layout style={styles.footer}>
-      <Text>Total Request:</Text>
-      <Text category="h5">{`${requestList.length}`}</Text>
+      <Text>Total Sessions:</Text>
+      <Text category="h5">{`${requestsList?.length}`}</Text>
     </Layout>
   );
 
@@ -63,7 +63,7 @@ export default ({
   return (
     <Layout style={styles.container} level="2">
       <List
-        data={requestList || []}
+        data={requestsList || []}
         renderItem={renderProductItem}
         ListHeaderComponent={renderFooter}
       />

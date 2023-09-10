@@ -9,7 +9,6 @@ import {
   Text,
   Modal,
 } from '@ui-kitten/components';
-import {HeartIcon, MessageCircleIcon, MoreHorizontalIcon} from './icons';
 import {Comment} from './data';
 import {RateBar} from './rate-bar.component';
 import {IReview} from '../../../../interfaces/users.interface';

@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import {RootState} from '.';
 import {IAuth, IStudent, ITutor, IUser} from '../interfaces/users.interface';
+import {IRequest} from '../interfaces/request.interface';
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   const response = await fetch('https://reqres.in/api/users?delay=1');
@@ -21,6 +22,7 @@ const usersSlice = createSlice({
     }),
     userData: {} as IUser & IAuth,
     profile: {} as ITutor & IStudent,
+    requests: [] as IRequest[],
   },
   reducers: {
     setUserData: (state, action) => {
@@ -28,6 +30,9 @@ const usersSlice = createSlice({
     },
     setProfileData: (state, action) => {
       state.profile = {...state.profile, ...action.payload};
+    },
+    setRequests: (state, action) => {
+      state.requests = action.payload;
     },
   },
   extraReducers: builder => {
@@ -56,4 +61,5 @@ export default usersSlice.reducer;
 export const reduxUserActions = usersSlice.actions;
 const selectUserData = (state: RootState) => state.user.userData;
 const selectUserProfile = (state: RootState) => state.user.profile;
-export {selectUserData, selectUserProfile};
+const selectUserRequests = (state: RootState) => state.user.requests;
+export {selectUserData, selectUserProfile, selectUserRequests};

@@ -52,10 +52,10 @@ const RoutRender = ({Stack}) => {
     <Drawer.Navigator
       screenOptions={{gestureEnabled: false, headerShown: false}}
       drawerContent={props => <HomeDrawer {...props} />}>
-      <Drawer.Screen name="Request" component={ReqiestsListScreen} />
+      <Drawer.Screen name="Main" component={DashboardsNavigator} />
       <Drawer.Screen name="FindTutor" component={FindTutorNavigator} />
       <Drawer.Screen name="Profile" component={SocialNavigator} />
-      <Drawer.Screen name="Main" component={DashboardsNavigator} />
+      <Drawer.Screen name="Request" component={ReqiestsListScreen} />
       <Drawer.Screen name="ProfileSettings" component={ProfileNavigator} />
     </Drawer.Navigator>
   ) : (

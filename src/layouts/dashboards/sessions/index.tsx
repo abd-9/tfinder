@@ -2,9 +2,10 @@ import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Button, Icon, Tab, TabBar, Text} from '@ui-kitten/components';
 import {TrainingsListScreen} from './traininig-list.component';
-import ExpandableCalendarScreen from './Calender';
+import CommingSessionsScreen from './session-cart/index';
 import {StyleSheet, View} from 'react-native';
 import {AlertIcon, GlobalIcon} from './extra/icons';
+import {IRequest} from '../../../interfaces/request.interface';
 
 const TrainingsTabBar = ({navigation, state}): React.ReactElement => {
   const onTabSelect = (index: number): void => {
@@ -24,10 +25,18 @@ const TrainingsTabBar = ({navigation, state}): React.ReactElement => {
 
 const TopTab = createMaterialTopTabNavigator();
 
-export default (): React.ReactElement => (
+export default ({
+  requestsList,
+}: {
+  requestsList: IRequest[];
+}): React.ReactElement => (
   <TopTab.Navigator tabBar={props => <TrainingsTabBar {...props} />}>
     <TopTab.Screen name="Active session" component={EmptyPage} />
-    <TopTab.Screen name="Comming" component={ExpandableCalendarScreen} />
+    <TopTab.Screen
+      name="Comming"
+      initialParams={{requestsList}}
+      component={CommingSessionsScreen}
+    />
     <TopTab.Screen name="Canceled" component={TrainingsListScreen} />
   </TopTab.Navigator>
 );

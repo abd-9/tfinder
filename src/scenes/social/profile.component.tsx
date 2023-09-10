@@ -26,8 +26,7 @@ type ParamList = {
 export const Profile = ({
   navigation,
   route,
-}: // tutorId: aaaaa,
-{
+}: {
   navigation: NavigationProp<ParamListBase>;
   route: RouteProp<ParamList, 'Profile'>;
   tutorId: string;
@@ -38,7 +37,6 @@ export const Profile = ({
       onPress={() => navigation.navigate('FindTutor')}
     />
   );
-  console.log('route.params.tutorId', route.params.tutorId);
 
   const tutorsListData = useSelector(selectTutorsListData);
 

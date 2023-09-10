@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Trainings1Screen} from '../scenes/dashboards/trainings-1.component';
+import {MySeesionsScreen} from '../scenes/dashboards/sessions.component';
 import {getTutorIdApi} from '../api/tutor';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectUserData} from '../store/users';
@@ -21,7 +21,7 @@ export const DashboardsNavigator = (): React.ReactElement => {
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Trainings1" component={Trainings1Screen} />
+      <Stack.Screen name="MySessions" component={MySeesionsScreen} />
     </Stack.Navigator>
   );
 };
