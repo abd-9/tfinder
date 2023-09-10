@@ -10,8 +10,8 @@ import {
 } from '@ui-kitten/components';
 import {CartItem} from './extra/cart-item.component';
 import {Product} from './extra/data';
-import {useSelector} from 'react-redux';
-import {selectTutorsListData} from '../../../store/tutors';
+import {useDispatch, useSelector} from 'react-redux';
+import {reduxTutorActions, selectTutorsListData} from '../../../store/tutors';
 import {ITutor, USER_TYPE} from '../../../interfaces/users.interface';
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
 
@@ -22,10 +22,11 @@ export default ({
 }): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
   const TutorsListData = useSelector(selectTutorsListData);
+  const dispatch = useDispatch();
 
   const onItemChange = (tutor: ITutor): void => {
     // navigation.setParams({})
-
+    dispatch(reduxTutorActions.setSelectedTutor(tutor));
     navigation.navigate('Profile', {
       type: USER_TYPE.TUTOR,
       tutorId: tutor._id,

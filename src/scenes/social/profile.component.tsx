@@ -14,7 +14,7 @@ import {
   RouteProp,
   useRoute,
 } from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {reduxTutorActions, selectTutorsListData} from '../../store/tutors';
 
 type ParamList = {
@@ -26,9 +26,11 @@ type ParamList = {
 export const Profile = ({
   navigation,
   route,
-}: {
+}: // tutorId: aaaaa,
+{
   navigation: NavigationProp<ParamListBase>;
   route: RouteProp<ParamList, 'Profile'>;
+  tutorId: string;
 }): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
     <TopNavigationAction
@@ -36,14 +38,17 @@ export const Profile = ({
       onPress={() => navigation.navigate('FindTutor')}
     />
   );
+  console.log('route.params.tutorId', route.params.tutorId);
+
   const tutorsListData = useSelector(selectTutorsListData);
-  // const routee = useRoute();
-  // console.log('sasdasdawdawdawdawdawdawd  ', route.params.tutorId);
-  const tutorId = route.params.tutorId;
+
   // TODO: should call api in here to get tutor data instead of bring it form redux
-  const findTutorFromRedux = tutorsListData.list.find(
-    _tt => _tt._id == tutorId,
-  );
+  const findTutorFromRedux = tutorsListData.selectedTutor;
+
+  // tutorsListData.list.find(
+  //   _tt => _tt._id == tutorId,
+  // );
+
   return (
     <SafeAreaLayout style={styles.container} insets="top">
       <TopNavigation title="Profile" accessoryLeft={renderBackAction} />

@@ -42,7 +42,7 @@ ApiClient.interceptors.response.use(
     return response.data;
   },
   async error => {
-    // console.log('%c ---Error Response', 'color: red', error?.response);
+    console.log('Response Error log', error);
 
     // const originalConfig = error?.config;
     Toast.show(error?.response?.data?.message, {type: 'danger'});
@@ -61,7 +61,5 @@ ApiClient.interceptors.response.use(
   },
 );
 ApiClient.interceptors.request.use(req => {
-  console.log('request', req.url);
-  console.log('request', req);
   return req;
 });

@@ -12,10 +12,14 @@ const tutorsSlice = createSlice({
   name: 'tutor',
   initialState: {
     list: [] as ITutor[],
+    selectedTutor: {} as ITutor,
   },
   reducers: {
     setTutorList: (state, action) => {
       state.list = action.payload;
+    },
+    setSelectedTutor: (state, action) => {
+      state.selectedTutor = action.payload;
     },
   },
   extraReducers: builder => {},

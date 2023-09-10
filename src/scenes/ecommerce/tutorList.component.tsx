@@ -4,8 +4,15 @@ import {TopNavigation, TopNavigationAction} from '@ui-kitten/components';
 import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon, SearchIcon} from '../../components/icons';
 import ContentView from '../../layouts/ecommerce/shopping-cart';
+import {NavigationProp, ParamListBase} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {reduxTutorActions} from '../../store/tutors';
 
-export const TutorsListScreen = ({navigation}): React.ReactElement => {
+export const TutorsListScreen = ({
+  navigation,
+}: {
+  navigation: NavigationProp<ParamListBase>;
+}): React.ReactElement => {
   const onSearchActionPress = (): void => {
     navigation.navigate('TutorFilter');
   };

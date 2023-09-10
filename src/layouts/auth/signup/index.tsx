@@ -24,19 +24,31 @@ import {useFormik} from 'formik';
 import {SignupTutorSchema} from './extra/helper';
 import {createTutorApi} from '../../../api/tutor';
 import {Toast} from 'react-native-toast-notifications';
+import {createStudnetApi} from '../../../api/student';
 
 export default ({navigation}): React.ReactElement => {
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
   const styles = useStyleSheet(themedStyles);
   const onSubmit = (values: IUser) => {
-    createTutorApi(values)
-      .then(() => {
-        Toast.show('User created!', {type: 'success'});
-        navigation && navigation.goBack();
-      })
-      .catch(ee => {
-        Toast.show(ee.message, {type: 'danger'});
-      });
+    if (values.type == USER_TYPE.TUTOR) {
+      createTutorApi(values)
+        .then(() => {
+          Toast.show('User created!', {type: 'success'});
+          navigation && navigation.goBack();
+        })
+        .catch(ee => {
+          Toast.show(ee.message, {type: 'danger'});
+        });
+    } else {
+      createStudnetApi(values)
+        .then(() => {
+          Toast.show('User created!', {type: 'success'});
+          navigation && navigation.goBack();
+        })
+        .catch(ee => {
+          Toast.show(ee.message, {type: 'danger'});
+        });
+    }
   };
 
   const formik = useFormik({
@@ -72,15 +84,15 @@ export default ({navigation}): React.ReactElement => {
           style={styles.editAvatarButton}
           onPress={() => formik.setFieldValue('type', USER_TYPE.STUDENT)}
           status={formik.values.type == USER_TYPE.STUDENT ? 'basic' : 'ghost'}
-          accessoryLeft={TutorIcon}>
-          Tutor
+          accessoryLeft={StudentIcon}>
+          Student
         </Button>
         <Button
           style={styles.editAvatarButton}
           onPress={() => formik.setFieldValue('type', USER_TYPE.TUTOR)}
           status={formik.values.type == USER_TYPE.TUTOR ? 'basic' : 'ghost'}
-          accessoryLeft={StudentIcon}>
-          Student
+          accessoryLeft={TutorIcon}>
+          Tutor
         </Button>
       </View>
       <Layout style={styles.formContainer} level="1">

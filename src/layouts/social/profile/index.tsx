@@ -1,13 +1,22 @@
 import React from 'react';
-import {ListRenderItemInfo, StyleSheet, View} from 'react-native';
+import {
+  ListRenderItemInfo,
+  StyleSheet,
+  TimePickerAndroid,
+  View,
+} from 'react-native';
 import {
   Avatar,
   Button,
   Card,
+  Datepicker,
   Input,
   Layout,
   List,
   Modal,
+  RangeDatepicker,
+  Select,
+  SelectItem,
   Tab,
   TabBar,
   Text,
@@ -23,6 +32,7 @@ import {calculateAverageRating} from '../../ecommerce/shopping-cart/extra/helper
 import {
   IRequest,
   ISession,
+  REQUEST_REPETITION,
   REQUEST_STATUS,
   SESSION_STATUS,
 } from '../../../interfaces/request.interface';
@@ -31,6 +41,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectUserData} from '../../../store/users';
 import {ProfileSetting} from './extra/profile-setting.component';
 import {ScrollView} from 'react-native-gesture-handler';
+import {Formik} from 'formik';
+import moment from 'moment';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
+import {ClockIcon} from '../feed-1/extra/icons';
+import {sendRequestSessionApi} from '../../../api/student';
+import {Toast} from 'react-native-toast-notifications';
 
 const profile: Profile = Profile.jenniferGreen();
 
@@ -47,8 +64,13 @@ export default ({
   const usreData = useSelector(selectUserData);
   const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);
   const [visible, setVisible] = React.useState<boolean>(false);
+  const [showBookingModal, setShowBookingModal] =
+    React.useState<boolean>(false);
   const toggleModal = (): void => {
     setVisible(!visible);
+  };
+  const toggleBookingModal = (): void => {
+    setShowBookingModal(!showBookingModal);
   };
 
   const onFollowButtonPress = (): void => {
@@ -110,7 +132,7 @@ export default ({
             <Button
               style={styles.booknowButton}
               status="danger"
-              onPress={onFollowButtonPress}
+              onPress={toggleBookingModal}
               accessoryRight={BookIcon}>
               Book now!
             </Button>
@@ -149,6 +171,42 @@ export default ({
     // TODO: should call only one tutor api
     await getTutorsByFilterApi(dispatch);
   };
+
+  const handelSendSessionRequest = async (_values: IRequest & any) => {
+    const selectedStartDate = moment(_values.startDate);
+    const selectedStartTime = moment(_values.startTime);
+    const startDateTime = selectedStartDate
+      .set({
+        hour: selectedStartTime.get('hour'),
+        minute: selectedStartTime.get('minute'),
+        second: selectedStartTime.get('second'),
+      })
+      .toDate();
+    const selectedEndDate = moment(_values.endDate);
+    const selectedEndTime = moment(_values.endTime);
+    const endDateTime = selectedEndDate
+      .set({
+        hour: selectedEndTime.get('hour'),
+        minute: selectedEndTime.get('minute'),
+        second: selectedEndTime.get('second'),
+      })
+      .toDate();
+    const formatedRequest = {
+      rate: 31.0,
+      startDateTime: startDateTime.toISOString(),
+      endDateTime: endDateTime.toISOString(),
+      note: _values.note,
+      repetition: _values.repetition,
+    };
+    sendRequestSessionApi(
+      tutorData._id,
+      usreData.studentId,
+      formatedRequest,
+    ).then(() => {
+      toggleBookingModal();
+      Toast.show('Sent successfuly!', {type: 'success'});
+    });
+  };
   return (
     <View style={{flex: 1}}>
       <List
@@ -182,6 +240,142 @@ export default ({
           </View>
           <Button onPress={handelAddReview}>Rate</Button>
         </Card>
+      </Modal>
+      <Modal
+        backdropStyle={styles.backdrop}
+        visible={showBookingModal}
+        style={{
+          width: '90%',
+          paddingVertical: 10,
+        }}
+        // onBackdropPress={toggleBookingModal}
+      >
+        <Formik
+          initialValues={initialRequest}
+          // validationSchema={SignupTutorSchema}
+          onSubmit={handelSendSessionRequest}>
+          {formik => {
+            // const showMode = currentMode => {
+            //   DateTimePicker.open({
+            //     value: date,
+            //     onChange,
+            //     mode: currentMode,
+            //     is24Hour: true,
+            //   });
+            // };
+            return (
+              <Card
+                disabled={true}
+                style={{
+                  width: '100%',
+                }}>
+                <Text category="h4">Request session!</Text>
+
+                <View style={styles.formContainer}>
+                  <Select
+                    placeholder={'Select repetition'}
+                    label="Repetition"
+                    value={
+                      RepetitionOptions.find(
+                        _ => _.value == formik.values?.repetition,
+                      )?.name
+                    }
+                    style={{marginVertical: 5}}>
+                    {RepetitionOptions.map((option, index) => (
+                      <SelectItem
+                        key={index}
+                        title={option.name}
+                        onPress={() => {
+                          formik.setFieldValue('repetition', option.value);
+                        }}
+                        selected={formik.values?.repetition == option.value}
+                      />
+                    ))}
+                  </Select>
+
+                  <RangeDatepicker
+                    // backdropStyle={styles.backdrop}
+                    range={{
+                      startDate: formik.values.startDateTime,
+                      endDate: formik.values.endDateTime,
+                    }}
+                    onSelect={nextRange => {
+                      formik.setFieldValue(
+                        'startDateTime',
+                        nextRange.startDate,
+                      );
+                      formik.setFieldValue('endDateTime', nextRange.endDate);
+                    }}
+                  />
+
+                  {/* <TimePicker
+                    label="End Time"
+                    date={selectedEndTime}
+                    onSelect={time => setSelectedEndTime(time)}
+                  /> */}
+                  {/* <DateTimePicker
+                    mode="time"
+                    value={formik.values.startTime}
+                    // onChange={()=>{}}
+                  /> */}
+
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Button
+                      size="small"
+                      accessoryLeft={ClockIcon}
+                      style={{marginTop: 10, width: '48%'}}
+                      // label="Your review"
+                      onPress={() => {
+                        DateTimePickerAndroid.open({
+                          value: new Date(),
+                          onChange: (_, _value) =>
+                            formik.setFieldValue('startTime', _value),
+                          mode: 'time',
+                          is24Hour: true,
+                        });
+                      }}>
+                      Start Time:{' '}
+                      {moment(formik.values.startTime).format('HH:mm:ss')}
+                    </Button>
+                    <Button
+                      size="small"
+                      accessoryLeft={ClockIcon}
+                      style={{marginTop: 10, width: '48%'}}
+                      onPress={() => {
+                        DateTimePickerAndroid.open({
+                          value: new Date(),
+                          onChange: (_, _value) =>
+                            formik.setFieldValue('endTime', _value),
+                          mode: 'time',
+                          is24Hour: true,
+                        });
+                      }}>
+                      End Time:
+                      {moment(formik.values.endTime).format('HH:mm:ss')}
+                    </Button>
+                  </View>
+
+                  <Input
+                    multiline
+                    style={{marginTop: 10}}
+                    numberOfLines={4}
+                    // label="Your review"
+                    placeholder="Note in here"
+                    // status="control"
+                    value={formik.values.note}
+                    onChangeText={_text => formik.setFieldValue('note', _text)}
+                  />
+                </View>
+                <Button onPress={formik.handleSubmit}>Send Request now</Button>
+              </Card>
+            );
+          }}
+        </Formik>
       </Modal>
     </View>
   );
@@ -425,3 +619,19 @@ const UserExperiance = ({
     </Layout>
   );
 };
+
+const initialRequest: IRequest & any = {
+  rate: 31.0,
+  startDateTime: new Date(),
+  endDateTime: new Date(),
+  note: '',
+  repetition: REQUEST_REPETITION.ONCE,
+  endTime: new Date(),
+  startTime: new Date(),
+};
+
+const RepetitionOptions = [
+  {name: 'Once', value: REQUEST_REPETITION.ONCE},
+  {name: 'Daily', value: REQUEST_REPETITION.DAILY},
+  {name: 'Weekly', value: REQUEST_REPETITION.WEEKLY},
+];

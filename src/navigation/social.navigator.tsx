@@ -1,28 +1,26 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Profile} from '../scenes/social/profile.component';
+import {useRoute} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 
 const Stack = createStackNavigator();
 
 export const SocialNavigator = ({route}): React.ReactElement => {
+  const _route = useRoute();
+
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator
+      key={JSON.stringify(_route.params)}
+      screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="Profile"
         initialParams={{
-          tutorId: route.params.tutorId,
-          ...(route?.params || {}),
+          tutorId: route.params?.tutorId,
         }}
+        // tutorId={_route.params?.tutorId}
         component={Profile}
       />
-      {/* <Stack.Screen name="Profile5" component={Profile5Screen} /> */}
-      {/* <Stack.Screen name="Profile6" component={Profile6Screen} /> */}
-      {/* <Stack.Screen name="Profile7" component={Profile7Screen} /> */}
-      {/* <Stack.Screen name="ProfileSettings1" component={ProfileSettings1Screen} /> */}
-      {/* <Stack.Screen name="ProfileSettings2" component={ProfileSettings2Screen} /> */}
-      {/* <Stack.Screen name="ProfileSettings3" component={ProfileSettings3Screen} /> */}
-
-      {/* <Stack.Screen name="Chat1" component={Chat1Screen} /> */}
     </Stack.Navigator>
   );
 };
