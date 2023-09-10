@@ -1,5 +1,5 @@
 import ApiClient from '.';
-import {REQUEST_STATUS} from '../interfaces/request.interface';
+import {REQUEST_STATUS, SESSION_STATUS} from '../interfaces/request.interface';
 import {IReview, ITutor, IUser} from '../interfaces/users.interface';
 import store from '../store';
 import {reduxTutorActions} from '../store/tutors';
@@ -92,6 +92,23 @@ export async function updateRequestStatusApi(
   try {
     const response = await ApiClient.put<IUser>(
       `/request/${requestId}/${status}`,
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('api - Error: ', error.message);
+
+    throw Error(error);
+  }
+}
+
+export async function updateSessionStatusApi(
+  sessionId?: string,
+  status?: SESSION_STATUS,
+) {
+  try {
+    const response = await ApiClient.put<IUser>(
+      `/request/session/${sessionId}/${status}`,
     );
 
     return response.data;

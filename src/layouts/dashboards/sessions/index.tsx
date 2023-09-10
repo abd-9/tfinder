@@ -37,7 +37,7 @@ export default ({
       initialParams={{requestsList}}
       component={CommingSessionsScreen}
     />
-    <TopTab.Screen name="Canceled" component={TrainingsListScreen} />
+    <TopTab.Screen name="Canceled" component={CommingSessionsScreen} />
   </TopTab.Navigator>
 );
 

@@ -8,14 +8,16 @@ import {useSelector} from 'react-redux';
 import {selectUserData} from '../../../../../store/users';
 import {
   IRequest,
+  ISession,
   REQUEST_STATUS,
+  SESSION_STATUS,
 } from '../../../../../interfaces/request.interface';
 import {RepetitionOptions} from '../../../../social/profile';
 
 export type TutorItemProps = ListItemProps & {
   index: number;
-  item: IRequest;
-  onRequestResponse: (status: REQUEST_STATUS, reqeust: IRequest) => void;
+  item: any;
+  onRequestResponse: (status: SESSION_STATUS, session: ISession) => void;
 };
 
 export const RequestItem = (props: TutorItemProps): React.ReactElement => {
@@ -37,62 +39,70 @@ export const RequestItem = (props: TutorItemProps): React.ReactElement => {
       {...listItemProps}
       // onPress={() => onRequestResponse(tutor)}
       style={[styles.container, style]}>
-      <Image
+      {/* <Image
         style={styles.image}
         // source={require('../../../../assets/img/student.png')}
-      />
+      /> */}
       <View style={styles.detailsContainer}>
-        <Text category="s1">{item.student?.user?.name}</Text>
+        <Text style={{marginVertical: 5}} category="s1">
+          {item.requestDetails?.student?.user?.name}
+        </Text>
         <View>
-          <Text appearance="hint" category="p2">
-            {RepetitionOptions.find(_r => item.repetition == _r.value)?.name}
+          <Text style={{marginVertical: 5}} appearance="hint" category="p2">
+            {item.requestDetails?.note && `Note: ${item.requestDetails.note}`}
           </Text>
-          <Text appearance="hint" category="p2">
+          <Text style={{marginVertical: 5}} appearance="hint" category="p2">
             {renderFormatDate}
           </Text>
         </View>
-        <Text category="s2">{item.teachLevel}</Text>
-        {item.subjectsTaught && item.subjectsTaught?.length > 0 && (
-          <>
-            <Text style={styles.amount} category="s2">
-              {`Subjects:`}
-            </Text>
-            <View style={styles.amountContainer}>
-              {item.subjectsTaught?.map((_t, _index) => {
-                return (
-                  <Button
-                    key={_index}
-                    status="basic"
-                    style={[styles.iconButton, styles.amountButton]}
-                    size="tiny">
-                    {_t}
-                  </Button>
-                );
-              })}
-            </View>
-          </>
-        )}
+        <Text style={{marginVertical: 5}} category="s2">
+          Teaching Level: {item.requestDetails?.teachLevel}
+        </Text>
+        {item.requestDetails?.subjectsTaught &&
+          item.requestDetails?.subjectsTaught?.length > 0 && (
+            <>
+              <Text style={styles.amount} category="s2">
+                {`Subjects:`}
+              </Text>
+              <View style={styles.amountContainer}>
+                {item.requestDetails?.subjectsTaught?.map((_t, _index) => {
+                  return (
+                    <Button
+                      key={_index}
+                      status="basic"
+                      style={[styles.iconButton, styles.amountButton]}
+                      size="tiny">
+                      {_t}
+                    </Button>
+                  );
+                })}
+              </View>
+            </>
+          )}
 
-        <View style={styles.actionsButtons}>
-          <Button
-            style={[styles.iconButton, styles.amountButton]}
-            size="small"
-            status="danger"
-            accessoryLeft={CloseIcon}
-            onPress={() => onRequestResponse(REQUEST_STATUS.REJECTED, item)}>
-            {userData.tutorId ? 'Reject' : 'Cancel'}
-          </Button>
-          {userData.tutorId && (
+        {item.status == SESSION_STATUS.PENDING && (
+          <View style={styles.actionsButtons}>
             <Button
               style={[styles.iconButton, styles.amountButton]}
               size="small"
-              status="success"
-              accessoryLeft={PlusIcon}
-              onPress={() => onRequestResponse(REQUEST_STATUS.ACCEPTED, item)}>
-              Accept
+              status="danger"
+              accessoryLeft={CloseIcon}
+              onPress={() => onRequestResponse(SESSION_STATUS.CANCELLED, item)}>
+              Cancel
             </Button>
-          )}
-        </View>
+            {userData.tutorId && (
+              <Button
+                style={[styles.iconButton, styles.amountButton]}
+                size="small"
+                status="success"
+                onPress={() =>
+                  onRequestResponse(SESSION_STATUS.COMPLETED, item)
+                }>
+                Compelet
+              </Button>
+            )}
+          </View>
+        )}
       </View>
     </ListItem>
   );

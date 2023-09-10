@@ -48,7 +48,7 @@ export default (): React.ReactElement => {
 const RoutRender = ({Stack}) => {
   const userData = useSelector(selectUserData);
 
-  return 'userData.token' ? (
+  return userData.token ? (
     <Drawer.Navigator
       screenOptions={{gestureEnabled: false, headerShown: false}}
       drawerContent={props => <HomeDrawer {...props} />}>
