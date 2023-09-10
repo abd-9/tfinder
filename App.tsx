@@ -20,6 +20,8 @@ import {ToastProvider} from 'react-native-toast-notifications';
 import {selectUserData} from './src/store/users';
 import {ProfileNavigator} from './src/navigation/profile.navigator';
 import {FindTutorNavigator} from './src/navigation/tutors.navigator';
+import {TutorsListScreen} from './src/scenes/ecommerce/tutorList.component';
+import {ReqiestsListScreen} from './src/scenes/ecommerce/requestList.component';
 
 // import Toast from 'react-native-toast-message';
 // import {createStackNavigator} from '@react-navigation/stack';
@@ -50,6 +52,7 @@ const RoutRender = ({Stack}) => {
     <Drawer.Navigator
       screenOptions={{gestureEnabled: false, headerShown: false}}
       drawerContent={props => <HomeDrawer {...props} />}>
+      <Drawer.Screen name="Request" component={ReqiestsListScreen} />
       <Drawer.Screen name="FindTutor" component={FindTutorNavigator} />
       <Drawer.Screen name="Profile" component={SocialNavigator} />
       <Drawer.Screen name="Main" component={DashboardsNavigator} />

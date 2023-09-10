@@ -1,4 +1,5 @@
 import ApiClient from '.';
+import {REQUEST_STATUS} from '../interfaces/request.interface';
 import {IReview, ITutor, IUser} from '../interfaces/users.interface';
 import store from '../store';
 import {reduxTutorActions} from '../store/tutors';
@@ -66,7 +67,36 @@ export async function createTutorApi(tutorData: IUser) {
 
     return response.data;
   } catch (error) {
-    console.error('create turor issue - Error: ', error.message);
+    console.error('api - Error: ', error.message);
+
+    throw Error(error);
+  }
+}
+export async function acceptRequestApi(requestId?: string) {
+  try {
+    const response = await ApiClient.post<IUser>(
+      `/tutors/request/${requestId}`,
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('api - Error: ', error.message);
+
+    throw Error(error);
+  }
+}
+export async function updateRequestStatusApi(
+  requestId?: string,
+  status?: REQUEST_STATUS,
+) {
+  try {
+    const response = await ApiClient.put<IUser>(
+      `/request/${requestId}/${status}`,
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('api - Error: ', error.message);
 
     throw Error(error);
   }

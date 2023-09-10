@@ -26,6 +26,8 @@ export interface IRequest {
   startDateTime?: Date;
   endDateTime?: Date;
   note?: string;
+  teachLevel?: string;
+  subjectsTaught?: string[];
   status?: REQUEST_STATUS;
   sessions?: ISession[];
   repetition?: REQUEST_REPETITION;

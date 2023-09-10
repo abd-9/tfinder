@@ -48,6 +48,7 @@ import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import {ClockIcon} from '../feed-1/extra/icons';
 import {sendRequestSessionApi} from '../../../api/student';
 import {Toast} from 'react-native-toast-notifications';
+import {SubjectsTaught} from '../profile-settings-1/extra/helper';
 
 const profile: Profile = Profile.jenniferGreen();
 
@@ -192,12 +193,14 @@ export default ({
       })
       .toDate();
     const formatedRequest = {
-      rate: 31.0,
       startDateTime: startDateTime.toISOString(),
       endDateTime: endDateTime.toISOString(),
       note: _values.note,
       repetition: _values.repetition,
+      subjectsTaught: _values.subjectsTaught,
+      teachLevel: _values.teachLevel,
     };
+
     sendRequestSessionApi(
       tutorData._id,
       usreData.studentId,
@@ -242,6 +245,7 @@ export default ({
         </Card>
       </Modal>
       <Modal
+        onBackdropPress={toggleBookingModal}
         backdropStyle={styles.backdrop}
         visible={showBookingModal}
         style={{
@@ -263,6 +267,15 @@ export default ({
             //     is24Hour: true,
             //   });
             // };
+            const handleSelectCity = (_selected: string, keyName: string) => {
+              const updatedSelectedIndex = formik.values[keyName]?.includes(
+                _selected,
+              )
+                ? formik.values[keyName]?.filter(i => i != _selected)
+                : [...(formik.values[keyName] || []), _selected];
+
+              formik.setFieldValue(keyName, updatedSelectedIndex);
+            };
             return (
               <Card
                 disabled={true}
@@ -293,6 +306,40 @@ export default ({
                     ))}
                   </Select>
 
+                  <Select
+                    multiSelect={true}
+                    label="Session Subjects"
+                    style={{marginVertical: 5}}
+                    placeholder={'Select Subjects '}
+                    value={formik.values?.subjectsTaught?.join(', ')}>
+                    {SubjectsTaught.map((option, index) => (
+                      <SelectItem
+                        key={index}
+                        title={option}
+                        onPress={() => {
+                          handleSelectCity(option, 'subjectsTaught');
+                        }}
+                        selected={Boolean(
+                          formik.values?.subjectsTaught?.find(_ => _ == option),
+                        )}
+                      />
+                    ))}
+                  </Select>
+                  <Select
+                    placeholder={'Select Your level'}
+                    label="Student level"
+                    value={formik.values?.teachLevel}
+                    style={{marginVertical: 5}}>
+                    {tutorData.teachLevel?.map((option, index) => (
+                      <SelectItem
+                        key={index}
+                        title={option}
+                        onPress={() => {
+                          formik.setFieldValue('teachLevel', option);
+                        }}
+                      />
+                    ))}
+                  </Select>
                   <RangeDatepicker
                     // backdropStyle={styles.backdrop}
                     range={{
@@ -307,17 +354,6 @@ export default ({
                       formik.setFieldValue('endDateTime', nextRange.endDate);
                     }}
                   />
-
-                  {/* <TimePicker
-                    label="End Time"
-                    date={selectedEndTime}
-                    onSelect={time => setSelectedEndTime(time)}
-                  /> */}
-                  {/* <DateTimePicker
-                    mode="time"
-                    value={formik.values.startTime}
-                    // onChange={()=>{}}
-                  /> */}
 
                   <View
                     style={{
@@ -630,7 +666,7 @@ const initialRequest: IRequest & any = {
   startTime: new Date(),
 };
 
-const RepetitionOptions = [
+export const RepetitionOptions = [
   {name: 'Once', value: REQUEST_REPETITION.ONCE},
   {name: 'Daily', value: REQUEST_REPETITION.DAILY},
   {name: 'Weekly', value: REQUEST_REPETITION.WEEKLY},

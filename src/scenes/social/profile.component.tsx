@@ -45,10 +45,6 @@ export const Profile = ({
   // TODO: should call api in here to get tutor data instead of bring it form redux
   const findTutorFromRedux = tutorsListData.selectedTutor;
 
-  // tutorsListData.list.find(
-  //   _tt => _tt._id == tutorId,
-  // );
-
   return (
     <SafeAreaLayout style={styles.container} insets="top">
       <TopNavigation title="Profile" accessoryLeft={renderBackAction} />

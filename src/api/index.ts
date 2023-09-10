@@ -2,24 +2,21 @@ import axios from 'axios';
 import {AppStorage} from '../services/app-storage.service';
 import {Toast} from 'react-native-toast-notifications';
 
+let token = 'ssss';
+
 const ApiClient = axios.create({
   baseURL: 'http://192.168.0.185:3002/api',
-  headers: {
-    'Content-type': 'application/json',
-  },
 });
-
+// axios.defaults.headers.common = {
+//   Authorization: `Bearer asdasdasdasdwqwdqwdqwd`,
+// };
 export const setAuthorizationHeader = async (_token?: string) => {
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGZjM2ZhYzU2NjVlYTRmMjRjNTRiYzciLCJ0dXRvcklkIjoiNjRmYzNmYWM1NjY1ZWE0ZjI0YzU0YmM5Iiwic3R1ZGVudElkIjoiIiwiaWF0IjoxNjk0Mjg4MzM4LCJleHAiOjUyOTQyODgzMzh9.FwnR1QLdr_PGHERqw05PBkhhH2YIWsD3OzNDtE1vDnU';
+  const ttt = await AppStorage.getToken();
 
-  //await AppStorage.getToken();
+  token = ttt || _token;
 
-  if (_token || token) {
-    // ApiClient.headers.setAuthorization(`Bearer ${token}`);
-    ApiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    ApiClient.defaults.headers['Authorization'] = `Bearer ${token}`;
-  }
+  // ApiClient.headers.setAuthorization(`Bearer ${token}`);
+  // ApiClient.defaults.headers.common.Authorization = `Bearer ${ttt}`;
 };
 
 setAuthorizationHeader();
@@ -36,7 +33,18 @@ export interface AxiosError {
   request?: any;
   config?: any;
 }
+ApiClient.interceptors.request.use(
+  async config => {
+    const ttt = await AppStorage.getToken();
 
+    config.headers['Authorization'] = 'Bearer ' + ttt;
+    config.headers.setAuthorization('Bearer ' + ttt);
+    return config;
+  },
+  error => {
+    Promise.reject(error);
+  },
+);
 ApiClient.interceptors.response.use(
   response => {
     return response.data;
@@ -61,5 +69,7 @@ ApiClient.interceptors.response.use(
   },
 );
 ApiClient.interceptors.request.use(req => {
+  console.log('dasdaw22222', req);
+
   return req;
 });
