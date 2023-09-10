@@ -17,7 +17,20 @@ import {Comment, Post, Profile} from './extra/data';
 import {RateBar} from './extra/rate-bar.component';
 import {CommentItem} from './extra/comment-list.component';
 import {Article} from '../../articles/article-3/extra/data';
-import {StarIcon} from '../../../components/icons';
+import {BookIcon, StarIcon} from '../../../components/icons';
+import {IReview, ITutor} from '../../../interfaces/users.interface';
+import {calculateAverageRating} from '../../ecommerce/shopping-cart/extra/helper';
+import {
+  IRequest,
+  ISession,
+  REQUEST_STATUS,
+  SESSION_STATUS,
+} from '../../../interfaces/request.interface';
+import {addTutorReviewApi, getTutorsByFilterApi} from '../../../api/tutor';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectUserData} from '../../../store/users';
+import {ProfileSetting} from './extra/profile-setting.component';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const profile: Profile = Profile.jenniferGreen();
 
@@ -25,7 +38,13 @@ const comments: Comment[] = [
   Comment.byHubertFranck(),
   Comment.byHubertFranck(),
 ];
-export default ({navigation}): React.ReactElement => {
+export default ({
+  navigation,
+  tutorData,
+}: {
+  tutorData: ITutor;
+}): React.ReactElement => {
+  const usreData = useSelector(selectUserData);
   const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);
   const [visible, setVisible] = React.useState<boolean>(false);
   const toggleModal = (): void => {
@@ -36,56 +55,67 @@ export default ({navigation}): React.ReactElement => {
     toggleModal();
   };
   const renderItem = (
-    info: ListRenderItemInfo<Comment>,
+    info: ListRenderItemInfo<IReview>,
   ): React.ReactElement => {
-    if (selectedTabIndex == 0) return <UserExperiance />;
+    if (selectedTabIndex == 0) return <UserExperiance tutorData={tutorData} />;
     return <CommentItem item={info.item} />;
   };
 
+  const getAcceptedRequests = (_requests: IRequest[]): number => {
+    return _requests.filter(_s => _s.status == REQUEST_STATUS.ACCEPTED).length;
+  };
   const renderHeader = (): React.ReactElement => {
-    const [rating, setRating] = React.useState<number>(4);
-
     return (
       <Layout style={styles.header} level="1">
         <Avatar
           style={styles.profileAvatar}
           size="large"
-          source={profile.photo}
+          source={require('./assets/teacher.png')}
         />
         <View style={styles.profileDetailsContainer}>
-          <Text category="h4">{profile.fullName}</Text>
+          <Text category="h4">{tutorData.user?.name}</Text>
           <Text appearance="hint" category="s1">
-            {profile.location}
+            {tutorData.location}
           </Text>
           <RateBar
             style={styles.rateBar}
-            hint="Experience"
-            value={rating}
-            onValueChange={setRating}
+            hint="Rating"
+            value={calculateAverageRating(tutorData.reviews)}
+            onValueChange={() => {}}
           />
           <View style={styles.profileSocialsContainer}>
             <ProfileSocial
               style={styles.profileSocialContainer}
-              hint="Sessions"
-              value={`${profile.followers}`}
+              hint="Reviews"
+              value={`${tutorData.reviews?.length || 0}`}
             />
             <ProfileSocial
               style={styles.profileSocialContainer}
-              hint="Following"
-              value={`${profile.following}`}
+              hint="Active studnets"
+              value={`${getAcceptedRequests(tutorData.requests || [])}`}
             />
-            <ProfileSocial
+            {/* <ProfileSocial
               style={styles.profileSocialContainer}
               hint="Posts"
               value={`${profile.posts}`}
-            />
+            /> */}
           </View>
-          <Button
-            style={styles.followButton}
-            onPress={onFollowButtonPress}
-            accessoryRight={StarIcon}>
-            Rate it
-          </Button>
+          <View>
+            <Button
+              style={styles.followButton}
+              onPress={onFollowButtonPress}
+              accessoryRight={StarIcon}>
+              Rate it
+            </Button>
+            <Button
+              style={styles.booknowButton}
+              status="danger"
+              onPress={onFollowButtonPress}
+              accessoryRight={BookIcon}>
+              Book now!
+            </Button>
+          </View>
+
           <View style={styles.buttons}>
             <TabBar
               onSelect={_index => setSelectedTabIndex(_index)}
@@ -98,14 +128,33 @@ export default ({navigation}): React.ReactElement => {
       </Layout>
     );
   };
+  const dispatch = useDispatch();
   const [rating, setRating] = React.useState<number>(3);
+  const [review, setReview] = React.useState<string>('');
+  const handelAddReview = async () => {
+    if (!review) {
+      return;
+    }
+    const dateReview = {
+      comment: review,
+      user: usreData._id || '',
+      rate: rating,
 
+      // TODO must remove change
+      student: usreData.studentId || '64fc43bf3aa6d3f4c9722691',
+    };
+    await addTutorReviewApi(tutorData?._id, dateReview);
+    setReview('');
+    toggleModal();
+    // TODO: should call only one tutor api
+    await getTutorsByFilterApi(dispatch);
+  };
   return (
     <View style={{flex: 1}}>
       <List
         style={styles.list}
         contentContainerStyle={styles.listContent}
-        data={selectedTabIndex == 0 ? [{}] : comments} // if the tab is user info then we have to add only one item to avoid repeating the element
+        data={selectedTabIndex == 0 ? [{}] : tutorData.reviews}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}
       />
@@ -125,13 +174,13 @@ export default ({navigation}): React.ReactElement => {
             <Input
               style={{marginTop: 10}}
               // label="Your review"
-              placeholder="Type a review "
+              placeholder="Type a review"
               // status="control"
-              // value={email}
-              // onChangeText={setEmail}
+              value={review}
+              onChangeText={setReview}
             />
           </View>
-          <Button onPress={toggleModal}>Rate</Button>
+          <Button onPress={handelAddReview}>Rate</Button>
         </Card>
       </Modal>
     </View>
@@ -175,8 +224,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 10,
   },
+  booknowButton: {
+    marginVertical: 8,
+  },
   followButton: {
-    marginVertical: 16,
+    marginTop: 10,
   },
   post: {
     margin: 8,
@@ -220,6 +272,7 @@ const styles = StyleSheet.create({
     // flexDirection: 'row',
     marginTop: 16,
   },
+
   tabTitle: {
     color: 'text-control-color',
     flex: 1,
@@ -236,9 +289,40 @@ const styles = StyleSheet.create({
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+  container: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'background-basic-color-2',
+  },
+  contentContainer: {
+    paddingVertical: 24,
+  },
+  profileSetting: {
+    padding: 16,
+  },
+  section: {
+    marginTop: 24,
+  },
+  tags: {
+    // position: 'absolute',
+    flexDirection: 'row',
+    // left: 16,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // bottom: 6,
+  },
+  tag: {
+    borderRadius: 16,
+    margin: 2,
+  },
 });
 
-const UserExperiance = (): React.ReactElement => {
+const UserExperiance = ({
+  tutorData,
+}: {
+  tutorData: ITutor;
+}): React.ReactElement => {
   return (
     <Layout
       style={{
@@ -246,9 +330,98 @@ const UserExperiance = (): React.ReactElement => {
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 10,
+        width: '100%',
       }}>
-      {/* // TODO: build exoeriances section design for the tutor like year of exp, his certificates   */}
-      <Text category="h5">Tutro Experiances </Text>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}>
+        <ProfileSetting style={styles.profileSetting} hint="Teaching Level">
+          <View style={styles.tags}>
+            {tutorData.teachLevel?.map((_t, _index) => {
+              return (
+                <Button
+                  key={_index}
+                  style={[styles.iconButton, styles.tag]}
+                  size="tiny">
+                  {_t}
+                </Button>
+              );
+            })}
+          </View>
+        </ProfileSetting>
+        <ProfileSetting
+          style={styles.profileSetting}
+          hint="Location"
+          value={tutorData.location}
+        />
+
+        <ProfileSetting
+          style={[styles.profileSetting, styles.section]}
+          hint="Email"
+          value={tutorData.user?.email}
+        />
+        <ProfileSetting
+          style={styles.profileSetting}
+          hint="Phone Number"
+          value={tutorData.phone}
+        />
+        <ProfileSetting style={styles.profileSetting} hint="Subjects Taught">
+          <View style={styles.tags}>
+            {tutorData.subjectsTaught?.map((_t, _index) => {
+              return (
+                <Button
+                  key={_index}
+                  style={[styles.iconButton, styles.tag]}
+                  size="tiny">
+                  {_t}
+                </Button>
+              );
+            })}
+          </View>
+        </ProfileSetting>
+        <ProfileSetting style={styles.profileSetting} hint="Avilable cities">
+          <View style={styles.tags}>
+            {tutorData.cities?.map((_t, _index) => {
+              return (
+                <Button
+                  key={_index}
+                  style={[styles.iconButton, styles.tag]}
+                  size="tiny">
+                  {_t}
+                </Button>
+              );
+            })}
+          </View>
+        </ProfileSetting>
+        <ProfileSetting style={styles.profileSetting} hint="Qualifications">
+          <View style={styles.tags}>
+            {tutorData.qualifications?.map((_t, _index) => {
+              return (
+                <Button
+                  key={_index}
+                  style={[styles.iconButton, styles.tag]}
+                  size="tiny">
+                  {_t}
+                </Button>
+              );
+            })}
+          </View>
+        </ProfileSetting>
+        <ProfileSetting style={styles.profileSetting} hint="TeachingStyle">
+          <View style={styles.tags}>
+            {tutorData.teachingStyle?.map((_t, _index) => {
+              return (
+                <Button
+                  key={_index}
+                  style={[styles.iconButton, styles.tag]}
+                  size="tiny">
+                  {_t}
+                </Button>
+              );
+            })}
+          </View>
+        </ProfileSetting>
+      </ScrollView>
     </Layout>
   );
 };

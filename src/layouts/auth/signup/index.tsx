@@ -32,7 +32,6 @@ export default ({navigation}): React.ReactElement => {
     createTutorApi(values)
       .then(() => {
         Toast.show('User created!', {type: 'success'});
-
         navigation && navigation.goBack();
       })
       .catch(ee => {

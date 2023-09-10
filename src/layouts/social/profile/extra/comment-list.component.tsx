@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet, View} from 'react-native';
 import {
   Avatar,
   Button,
@@ -7,31 +7,48 @@ import {
   List,
   ListProps,
   Text,
+  Modal,
 } from '@ui-kitten/components';
 import {HeartIcon, MessageCircleIcon, MoreHorizontalIcon} from './icons';
 import {Comment} from './data';
 import {RateBar} from './rate-bar.component';
+import {IReview} from '../../../../interfaces/users.interface';
+import moment from 'moment';
+import {TrashIcon} from '../../../../components/icons';
+import {useSelector} from 'react-redux';
+import {selectUserData} from '../../../../store/users';
 
-export type CommentItemProps = {item: Comment};
+export type CommentItemProps = {item: IReview};
 
 export const CommentItem = (props: CommentItemProps): React.ReactElement => {
-  console.log('props', props);
+  const [visible, setVisible] = React.useState<boolean>(false);
+  const userData = useSelector(selectUserData);
+  const toggleModal = (): void => {
+    setVisible(!visible);
+  };
 
-  const renderCommentHeader = (comment: Comment): React.ReactElement => (
+  const handelRemoveReview = () => {
+    // TODO: call remove review API
+    toggleModal();
+  };
+  const renderCommentHeader = (comment: IReview): React.ReactElement => (
     <View style={styles.commentHeader}>
-      <Avatar source={comment.author.photo} />
+      <Avatar source={require('../../../../assets/img/student.png')} />
       <View style={styles.commentAuthorContainer}>
-        <Text category="s2">{comment.author.fullName}</Text>
+        <Text category="s2">{comment?.user?.name}</Text>
         <Text appearance="hint" category="c1">
-          {comment.date}
+          {moment(comment.createdDate).format('YYYY-MM-DD HH:MM')}
         </Text>
       </View>
-      <Button
-        style={styles.iconButton}
-        appearance="ghost"
-        status="basic"
-        accessoryLeft={MoreHorizontalIcon}
-      />
+      {userData._id == props.item.user?._id && (
+        <Button
+          onPress={toggleModal}
+          style={styles.iconButton}
+          appearance="ghost"
+          status="basic"
+          accessoryLeft={TrashIcon}
+        />
+      )}
     </View>
   );
 
@@ -42,27 +59,28 @@ export const CommentItem = (props: CommentItemProps): React.ReactElement => {
       <RateBar
         style={styles.rateBar2}
         hint="Rated"
-        value={4}
+        value={props.item.rate}
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         onValueChange={() => {}}
       />
-      <Text>{props.item.text}</Text>
-      <View style={styles.commentReactionsContainer}>
-        <Button
-          style={styles.iconButton}
-          appearance="ghost"
-          status="basic"
-          accessoryLeft={MessageCircleIcon}>
-          {`${props.item.comments.length}`}
-        </Button>
-        <Button
-          style={styles.iconButton}
-          appearance="ghost"
-          status="danger"
-          accessoryLeft={HeartIcon}>
-          {`${props.item.likes.length}`}
-        </Button>
-      </View>
+      <Text>{props.item.comment}</Text>
+
+      <Modal
+        backdropStyle={styles.backdrop}
+        visible={visible}
+        onBackdropPress={toggleModal}>
+        <Card disabled={true}>
+          <Text category="h5">Remove Review</Text>
+          <Text>Are you sure you want remove your review?</Text>
+
+          <Button
+            style={styles.removeButton}
+            status="danger"
+            onPress={handelRemoveReview}>
+            Remove
+          </Button>
+        </Card>
+      </Modal>
     </Card>
   );
 };
@@ -93,5 +111,14 @@ const styles = StyleSheet.create({
     marginTop: -2,
     marginBottom: 6,
     marginLeft: -5,
+  },
+  modelContainer: {
+    minHeight: 192,
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  removeButton: {
+    marginVertical: 10,
   },
 });

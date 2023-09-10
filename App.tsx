@@ -19,6 +19,7 @@ import store from './src/store';
 import {ToastProvider} from 'react-native-toast-notifications';
 import {selectUserData} from './src/store/users';
 import {ProfileNavigator} from './src/navigation/profile.navigator';
+import {FindTutorNavigator} from './src/navigation/tutors.navigator';
 
 // import Toast from 'react-native-toast-message';
 // import {createStackNavigator} from '@react-navigation/stack';
@@ -45,12 +46,13 @@ export default (): React.ReactElement => {
 const RoutRender = ({Stack}) => {
   const userData = useSelector(selectUserData);
 
-  return userData.token ? (
+  return 'userData.token' ? (
     <Drawer.Navigator
       screenOptions={{gestureEnabled: false, headerShown: false}}
       drawerContent={props => <HomeDrawer {...props} />}>
-      <Drawer.Screen name="Main" component={DashboardsNavigator} />
+      <Drawer.Screen name="FindTutor" component={FindTutorNavigator} />
       <Drawer.Screen name="Profile" component={SocialNavigator} />
+      <Drawer.Screen name="Main" component={DashboardsNavigator} />
       <Drawer.Screen name="ProfileSettings" component={ProfileNavigator} />
     </Drawer.Navigator>
   ) : (

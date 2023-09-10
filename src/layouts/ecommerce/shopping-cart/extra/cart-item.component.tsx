@@ -1,103 +1,72 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import { Button, ListItem, ListItemProps, Text } from '@ui-kitten/components';
-import { CloseIcon, MinusIcon, PlusIcon } from './icons';
-import { Product } from './data';
+import {Image, StyleSheet, View} from 'react-native';
+import {Button, ListItem, ListItemProps, Text} from '@ui-kitten/components';
+import {ITutor} from '../../../../interfaces/users.interface';
+import {RateBar} from '../../../social/profile/extra/rate-bar.component';
+import {calculateAverageRating} from './helper';
 
-export type CartItemProps = ListItemProps & {
+export type TutorItemProps = ListItemProps & {
   index: number;
-  product: Product;
-  onProductChange: (product: Product, index: number) => void;
-  onRemove: (product: Product, index: number) => void;
+  tutor: ITutor;
+  onItemButtonPress: (tutor: ITutor) => void;
 };
 
-export const CartItem = (props: CartItemProps): React.ReactElement => {
+export const CartItem = (props: TutorItemProps): React.ReactElement => {
+  const {style, tutor, index, onItemButtonPress, ...listItemProps} = props;
 
-  const { style, product, index, onProductChange, onRemove, ...listItemProps } = props;
-
-  const decrementButtonEnabled = (): boolean => {
-    return product.amount > 1;
+  const tutorRating = calculateAverageRating(tutor.reviews);
+  const formateRateLabel = (): string => {
+    const finalLabel = 'Rate ';
+    if (tutor.reviews && tutor.reviews?.length > 0)
+      finalLabel + `(${tutor.reviews?.length + 1})`;
+    return finalLabel;
   };
-
-  const onRemoveButtonPress = (): void => {
-    onRemove(product, index);
-  };
-
-  const onMinusButtonPress = (): void => {
-    const updatedProduct: Product = new Product(
-      product.id,
-      product.title,
-      product.subtitle,
-      product.image,
-      product.price,
-      product.amount - 1,
-    );
-
-    onProductChange(updatedProduct, index);
-  };
-
-  const onPlusButtonPress = (): void => {
-    const updatedProduct: Product = new Product(
-      product.id,
-      product.title,
-      product.subtitle,
-      product.image,
-      product.price,
-      product.amount + 1,
-    );
-
-    onProductChange(updatedProduct, index);
-  };
-
   return (
     <ListItem
       {...listItemProps}
+      onPress={() => onItemButtonPress(tutor)}
       style={[styles.container, style]}>
-      <Image
-        style={styles.image}
-        source={product.image}
-      />
+      <Image style={styles.image} source={require('../assets/teacher.png')} />
       <View style={styles.detailsContainer}>
-        <Text
-          category='s1'>
-          {product.title}
+        <Text category="s1">{tutor.user?.name}</Text>
+        <Text appearance="hint" category="p2">
+          {tutor.location}
         </Text>
-        <Text
-          appearance='hint'
-          category='p2'>
-          {product.subtitle}
+        <Text category="s2">
+          {tutor?.rate || 0 > 0 ? `Per hour: ${tutor.rate}` : ''}
         </Text>
-        <Text category='s2'>
-          {product.formattedPrice}
+
+        <Text style={styles.amount} category="s2">
+          {`Subjects:`}
         </Text>
         <View style={styles.amountContainer}>
-          <Button
-            style={[styles.iconButton, styles.amountButton]}
-            size='tiny'
-            accessoryLeft={MinusIcon}
-            onPress={onMinusButtonPress}
-            disabled={!decrementButtonEnabled()}
-          />
-          <Text
-            style={styles.amount}
-            category='s2'>
-            {`${product.amount}`}
-          </Text>
-          <Button
-            style={[styles.iconButton, styles.amountButton]}
-            size='tiny'
-            accessoryLeft={PlusIcon}
-            onPress={onPlusButtonPress}
+          {tutor.subjectsTaught?.map((_t, _index) => {
+            return (
+              <Button
+                key={_index}
+                style={[styles.iconButton, styles.amountButton]}
+                size="tiny">
+                {_t}
+              </Button>
+            );
+          })}
+        </View>
+
+        <View style={styles.amountContainer}>
+          <RateBar
+            hint={formateRateLabel()}
+            value={tutorRating}
+            onValueChange={() => {}}
           />
         </View>
       </View>
-      <Button
+      {/* <Button
         style={[styles.iconButton, styles.removeButton]}
-        appearance='ghost'
-        status='basic'
+        appearance="ghost"
+        status="basic"
         accessoryLeft={CloseIcon}
         onPress={onRemoveButtonPress}
-      />
+      /> */}
     </ListItem>
   );
 };
@@ -118,17 +87,21 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   amountContainer: {
-    position: 'absolute',
+    // position: 'absolute',
     flexDirection: 'row',
-    left: 16,
-    bottom: 16,
+    // left: 16,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // bottom: 6,
   },
   amountButton: {
     borderRadius: 16,
+    margin: 2,
   },
   amount: {
-    textAlign: 'center',
-    width: 40,
+    textAlign: 'left',
+    width: 60,
   },
   removeButton: {
     position: 'absolute',

@@ -1,14 +1,14 @@
-import { ImageSourcePropType } from 'react-native';
+import {ImageSourcePropType} from 'react-native';
 
 export class Product {
-
-  constructor(readonly id: number,
-              readonly title: string,
-              readonly subtitle: string,
-              readonly image: ImageSourcePropType,
-              readonly price: number,
-              readonly amount: number) {
-  }
+  constructor(
+    readonly id: number,
+    readonly title: string,
+    readonly subtitle: string,
+    readonly image: ImageSourcePropType,
+    readonly price: number,
+    readonly amount: number,
+  ) {}
 
   get formattedPrice(): string {
     return `$${this.price}`;

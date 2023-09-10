@@ -32,6 +32,7 @@ export interface ITutor extends IUser {
   subjectsTaught?: string[];
   qualifications?: string[];
   teachingStyle?: string[];
+  teachLevel?: string[];
   userId?: string; // Reference to the User model
   user?: IUser;
   reviews?: IReview[]; // Array of embedded reviews
@@ -63,6 +64,9 @@ export interface ICustomer {
 export interface IReview {
   comment: string;
   tutor?: string;
-  student: string;
+  student?: IStudent;
+  user?: IUser;
+
   rate: number;
+  createdDate?: Date;
 }

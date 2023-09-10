@@ -95,7 +95,6 @@ export default ({navigation}): React.ReactElement => {
               onPress={() => seSelectedUserType(USER_TYPE.TUTOR)}
               status={selectedUserType == USER_TYPE.TUTOR ? 'info' : 'basic'}
               style={styles.headerButtonStyle}>
-              {' '}
               <StudentIcon /> Student
             </Button>
           </View>

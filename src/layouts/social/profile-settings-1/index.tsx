@@ -30,6 +30,7 @@ import {
   Countries,
   Qualifications,
   SubjectsTaught,
+  TeachingLevels,
   TeachingStyles,
   updateTutorSchema,
 } from './extra/helper';
@@ -48,13 +49,6 @@ export default ({navigation}): React.ReactElement => {
     ...userPorfile,
   };
 
-  const renderPhotoButton = (): React.ReactElement => (
-    <Button
-      style={styles.editAvatarButton}
-      status="basic"
-      // accessoryLeft={CameraIcon}
-    />
-  );
   const onSubmit = (values: IUser & ITutor) => {
     if (userData.tutorId) {
       const formatedTutor: ITutor = {
@@ -68,6 +62,7 @@ export default ({navigation}): React.ReactElement => {
         teachingStyle: values.teachingStyle,
         userId: userData._id,
         phone: values?.phone,
+        teachLevel: values.teachLevel,
       };
       updateTutorIdApi(userData.tutorId, formatedTutor, dispatch).then(res => {
         Toast.show('Success!', {type: 'success'});
@@ -151,6 +146,25 @@ export default ({navigation}): React.ReactElement => {
               }}
               selected={Boolean(
                 formik.values?.qualifications?.find(_ => _ == option),
+              )}
+            />
+          ))}
+        </Select>
+        <Select
+          label="Teach Levels"
+          style={{marginVertical: 5}}
+          multiSelect={true}
+          placeholder={'Select Teaching Levels'}
+          value={formik.values?.teachLevel?.join(', ')}>
+          {TeachingLevels.map((option, index) => (
+            <SelectItem
+              key={index}
+              title={option}
+              onPress={() => {
+                handleSelectCity(option, 'teachLevel');
+              }}
+              selected={Boolean(
+                formik.values?.teachLevel?.find(_ => _ == option),
               )}
             />
           ))}

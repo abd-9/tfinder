@@ -10,7 +10,12 @@ import {
   Text,
   IndexPath,
 } from '@ui-kitten/components';
-import {BookIcon, GithubIcon, PowerIcon} from '../../components/icons';
+import {
+  BookIcon,
+  GithubIcon,
+  PowerIcon,
+  SearchIcon,
+} from '../../components/icons';
 import {reduxUserActions, selectUserData} from '../../store/users';
 import {logout} from '../../api/auth';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,6 +35,23 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
       onPress: () => {
         navigation.toggleDrawer();
         navigation.navigate('Main');
+      },
+    },
+    {
+      title: 'Find Tutro',
+      icon: SearchIcon,
+      onPress: () => {
+        navigation.toggleDrawer();
+        navigation.navigate('FindTutor');
+      },
+      hide: Boolean(userData.tutorId),
+    },
+    {
+      title: 'My Requests',
+      icon: SearchIcon,
+      onPress: () => {
+        navigation.toggleDrawer();
+        navigation.navigate('Request');
       },
     },
     {
@@ -96,7 +118,7 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
       footer={renderFooter}
       selectedIndex={selectedIndex}
       onSelect={index => setSelectedIndex(index)}>
-      {DATA.map((el, index) => (
+      {DATA.filter(_i => !_i.hide).map((el, index) => (
         <DrawerItem
           key={index}
           title={el.title}

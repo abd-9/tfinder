@@ -1,5 +1,6 @@
 import {Action, ThunkAction, configureStore} from '@reduxjs/toolkit';
 import usersReducer from './users';
+import tutorsReducer from './tutors';
 import {persistReducer, persistStore} from 'redux-persist';
 import {combineReducers} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,6 +19,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: usersReducer,
+  tutor: tutorsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

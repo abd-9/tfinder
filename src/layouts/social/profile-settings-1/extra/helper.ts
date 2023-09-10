@@ -95,3 +95,21 @@ export const SubjectsTaught = [
   'Foreign Languages',
   'Social Studies',
 ];
+
+export const TeachingLevels = [
+  'Elementary School',
+  'Middle School',
+  'High School',
+  'Undergraduate',
+  'Graduate',
+  'PhD',
+  'Special Education',
+  'Language Learning',
+  'Adult Education',
+  'Online Courses',
+  'Professional Development',
+  'Vocational Training',
+  'Homeschooling',
+  'Test Preparation',
+  'Life Skills Education',
+];
