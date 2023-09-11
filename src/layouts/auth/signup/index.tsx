@@ -120,7 +120,7 @@ export default ({navigation}): React.ReactElement => {
           // status={
           //   formik.touched.password && formik.errors.password ? 'danger' : ''
           // }
-          secureTextEntry={!formik.values.password}
+          secureTextEntry={true}
           placeholder="Password"
           accessoryRight={renderPasswordIcon}
           onChangeText={formik.handleChange('password')}

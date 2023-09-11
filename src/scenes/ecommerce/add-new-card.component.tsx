@@ -16,7 +16,7 @@ export const AddNewCardScreen = ({navigation}): React.ReactElement => {
 
   return (
     <SafeAreaLayout style={styles.container} insets="top">
-      <TopNavigation title="Add New Card" accessoryLeft={renderBackAction} />
+      <TopNavigation title="Tutors filter " accessoryLeft={renderBackAction} />
       <Divider />
       <ContentView navigation={navigation} />
     </SafeAreaLayout>
