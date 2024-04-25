@@ -1,28 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Mapping, Theme } from './theme.service';
-
-const MAPPING_KEY: string = 'mapping';
-const THEME_KEY: string = 'theme';
-
+const TOKEN_KEY = 'token';
 export class AppStorage {
-
-  static getMapping = (fallback?: Mapping): Promise<Mapping> => {
-    return AsyncStorage.getItem(MAPPING_KEY).then((mapping: Mapping) => {
-      return mapping || fallback;
+  static getToken = (): Promise<string> => {
+    return AsyncStorage.getItem(TOKEN_KEY).then(token => {
+      return String(token);
     });
   };
 
-  static getTheme = (fallback?: Theme): Promise<Theme> => {
-    return AsyncStorage.getItem(THEME_KEY).then((theme: Theme) => {
-      return theme || fallback;
-    });
-  };
-
-  static setMapping = (mapping: Mapping): Promise<void> => {
-    return AsyncStorage.setItem(MAPPING_KEY, mapping);
-  };
-
-  static setTheme = (theme: Theme): Promise<void> => {
-    return AsyncStorage.setItem(THEME_KEY, theme);
+  static setToken = (token: string): Promise<void> => {
+    return AsyncStorage.setItem(TOKEN_KEY, token);
   };
 }

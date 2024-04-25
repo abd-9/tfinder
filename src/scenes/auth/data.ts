@@ -1,4 +1,4 @@
-import { LayoutItem } from '../../model/layout-item.model';
+import {LayoutItem} from '../../model/layout-item.model';
 
 export interface AuthData extends LayoutItem {
   route: string;

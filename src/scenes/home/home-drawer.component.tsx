@@ -1,5 +1,5 @@
-import React, { ReactElement, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {ReactElement, useState} from 'react';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {
   Avatar,
   Divider,
@@ -10,60 +10,106 @@ import {
   Text,
   IndexPath,
 } from '@ui-kitten/components';
-import { BookIcon, GithubIcon } from '../../components/icons';
-import { SafeAreaLayout } from '../../components/safe-area-layout.component';
-import { WebBrowserService } from '../../services/web-browser.service';
-import { AppInfoService } from '../../services/app-info.service';
+import {
+  BookIcon,
+  GithubIcon,
+  PowerIcon,
+  SearchIcon,
+} from '../../components/icons';
+import {reduxUserActions, selectUserData} from '../../store/users';
+import {logout} from '../../api/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {USER_TYPE} from '../../interfaces/users.interface';
+// import {SafeAreaLayout} from '../../components/safe-area-layout.component';
+// import {WebBrowserService} from '../../services/web-browser.service';
 
-const version: string = AppInfoService.getVersion();
-
-export const HomeDrawer = ({ navigation }): DrawerElement => {
+export const HomeDrawer = ({navigation}): DrawerElement => {
   const [selectedIndex, setSelectedIndex] = useState<IndexPath>(null);
+  const dispatch = useDispatch();
+  const userData = useSelector(selectUserData);
 
   const DATA = [
     {
-      title: 'Libraries',
+      title: 'My Sessions',
       icon: GithubIcon,
       onPress: () => {
         navigation.toggleDrawer();
-        navigation.navigate('Libraries');
+        navigation.navigate('Main');
       },
     },
     {
-      title: 'Documentation',
-      icon: BookIcon,
+      title: 'Find Tutro',
+      icon: SearchIcon,
       onPress: () => {
-        WebBrowserService.openBrowserAsync('https://akveo.github.io/react-native-ui-kitten');
         navigation.toggleDrawer();
+        navigation.navigate('FindTutor');
+      },
+      hide: Boolean(userData.tutorId),
+    },
+    {
+      title: 'My Requests',
+      icon: SearchIcon,
+      onPress: () => {
+        navigation.toggleDrawer();
+        navigation.navigate('Request');
       },
     },
+    {
+      title: 'Logout',
+      icon: PowerIcon,
+      onPress: () => {
+        navigation.toggleDrawer();
+        logout(dispatch);
+        navigation.navigate('Auth');
+      },
+    },
+    // {
+    //   title: 'Documentation',
+    //   icon: BookIcon,
+    //   onPress: () => {
+    //     WebBrowserService.openBrowserAsync(
+    //       'https://akveo.github.io/react-native-ui-kitten',
+    //     );
+    //     navigation.toggleDrawer();
+    //   },
+    // },
   ];
 
   const renderHeader = (): ReactElement => (
-    <SafeAreaLayout insets='top' level='2'>
-      <Layout style={styles.header} level='2'>
+    // <SafeAreaLayout insets="top" level="2">
+    <Layout style={styles.header} level="2">
+      <Pressable
+        onPress={() => {
+          navigation.toggleDrawer();
+          navigation.navigate('ProfileSettings');
+        }}>
         <View style={styles.profileContainer}>
           <Avatar
-            size='giant'
-            source={require('../../assets/images/image-app-icon.png')}
+            size="giant"
+            source={
+              userData.type == USER_TYPE.TUTOR
+                ? require('../../assets/img/teacher.png')
+                : require('../../assets/img/student.png')
+            }
           />
-          <Text style={styles.profileName} category='h6'>
-            Kitten Tricks
+          <Text style={styles.profileName} category="h6">
+            {userData.name}
           </Text>
         </View>
-      </Layout>
-    </SafeAreaLayout>
+      </Pressable>
+    </Layout>
+    // </SafeAreaLayout>
   );
 
   const renderFooter = () => (
-    <SafeAreaLayout insets='bottom'>
-      <React.Fragment>
-        <Divider />
-        <View style={styles.footer}>
-          <Text>{`Version ${AppInfoService.getVersion()}`}</Text>
-        </View>
-      </React.Fragment>
-    </SafeAreaLayout>
+    // <SafeAreaLayout insets="bottom">
+    <React.Fragment>
+      <Divider />
+      <View style={styles.footer}>
+        <Text>{`Version 1`}</Text>
+      </View>
+    </React.Fragment>
+    // </SafeAreaLayout>
   );
 
   return (
@@ -71,9 +117,8 @@ export const HomeDrawer = ({ navigation }): DrawerElement => {
       header={renderHeader}
       footer={renderFooter}
       selectedIndex={selectedIndex}
-      onSelect={(index) => setSelectedIndex(index)}
-    >
-      {DATA.map((el, index) => (
+      onSelect={index => setSelectedIndex(index)}>
+      {DATA.filter(_i => !_i.hide).map((el, index) => (
         <DrawerItem
           key={index}
           title={el.title}

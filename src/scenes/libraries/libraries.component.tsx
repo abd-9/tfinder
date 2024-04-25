@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListRenderItemInfo, StyleSheet } from 'react-native';
+import {ListRenderItemInfo, StyleSheet} from 'react-native';
 import {
   Divider,
   List,
@@ -9,14 +9,13 @@ import {
   TopNavigationAction,
   useTheme,
 } from '@ui-kitten/components';
-import { ArrowIosBackIcon, ArrowIosForwardIcon } from '../../components/icons';
-import { SafeAreaLayout } from '../../components/safe-area-layout.component';
-import { WebBrowserService } from '../../services/web-browser.service';
-import { data } from './data';
-import { Library } from './type';
+import {ArrowIosBackIcon, ArrowIosForwardIcon} from '../../components/icons';
+import {SafeAreaLayout} from '../../components/safe-area-layout.component';
+import {WebBrowserService} from '../../services/web-browser.service';
+import {data} from './data';
+import {Library} from './type';
 
-export const LibrariesScreen = ({ navigation }): React.ReactElement => {
-
+export const LibrariesScreen = ({navigation}): React.ReactElement => {
   const theme = useTheme();
 
   const onItemPress = (index: number): void => {
@@ -24,22 +23,21 @@ export const LibrariesScreen = ({ navigation }): React.ReactElement => {
   };
 
   const renderBackAction = (): React.ReactElement => (
-    <TopNavigationAction
-      icon={ArrowIosBackIcon}
-      onPress={navigation.goBack}
-    />
+    <TopNavigationAction icon={ArrowIosBackIcon} onPress={navigation.goBack} />
   );
 
   const renderForwardIcon = (style): React.ReactElement => (
     <ArrowIosForwardIcon
       {...style}
-      width='24'
-      height='24'
+      width="24"
+      height="24"
       fill={theme['text-hint-color']}
     />
   );
 
-  const renderItem = (info: ListRenderItemInfo<Library>): React.ReactElement => (
+  const renderItem = (
+    info: ListRenderItemInfo<Library>,
+  ): React.ReactElement => (
     <ListItem
       style={styles.item}
       title={info.item.title}
@@ -51,24 +49,17 @@ export const LibrariesScreen = ({ navigation }): React.ReactElement => {
 
   const renderHeader = (): React.ReactElement => (
     <React.Fragment>
-      <Text
-        style={styles.headerTitle}
-        category='s2'>
-        This application is built with usage of tons Open Source community-driven libraries.
-        This is our thanks to maintainers.
+      <Text style={styles.headerTitle} category="s2">
+        This application is built with usage of tons Open Source
+        community-driven libraries. This is our thanks to maintainers.
       </Text>
-      <Divider style={styles.headerDivider}/>
+      <Divider style={styles.headerDivider} />
     </React.Fragment>
   );
 
   return (
-    <SafeAreaLayout
-      style={styles.safeArea}
-      insets='top'>
-      <TopNavigation
-        title='Libraries'
-        accessoryLeft={renderBackAction}
-      />
+    <SafeAreaLayout style={styles.safeArea} insets="top">
+      <TopNavigation title="Libraries" accessoryLeft={renderBackAction} />
       <List
         contentContainerStyle={styles.listContent}
         data={data}

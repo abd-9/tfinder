@@ -1,6 +1,6 @@
 import React from 'react';
-import ContentView from '../../layouts/auth/sign-in-5';
+import ContentView from '../../layouts/auth/signup';
 
-export const SignIn5Screen = ({ navigation }): React.ReactElement => (
-  <ContentView navigation={navigation}/>
+export const SignUpScreen = ({navigation}): React.ReactElement => (
+  <ContentView navigation={navigation} />
 );

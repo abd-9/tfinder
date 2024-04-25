@@ -1,28 +1,27 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { DashboardScreen } from '../scenes/dashboards/dashboards.component';
-import { DashboardGridScreen } from '../scenes/dashboards/dashboards-grid.component';
-import { DashboardsListScreen } from '../scenes/dashboards/dashboards-list.component';
-import { Trainings1Screen } from '../scenes/dashboards/trainings-1.component';
-import { Trainings2Screen } from '../scenes/dashboards/trainings-2.component';
-import { SettingsScreen } from '../scenes/dashboards/settings.component';
+import React, {useEffect} from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import {MySeesionsScreen} from '../scenes/dashboards/sessions.component';
+import {getTutorIdApi} from '../api/tutor';
+import {useDispatch, useSelector} from 'react-redux';
+import {selectUserData} from '../store/users';
+import {getStudentByIdApi} from '../api/student';
+import {setAuthorizationHeader} from '../api';
 
-const TopTab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-const DashboardsMenuNavigator = (): React.ReactElement => (
-  <TopTab.Navigator tabBar={(props) => <DashboardScreen {...props}/>}>
-    <TopTab.Screen name='DashboardGrid' component={DashboardGridScreen}/>
-    <TopTab.Screen name='DashboardList' component={DashboardsListScreen}/>
-  </TopTab.Navigator>
-);
+export const DashboardsNavigator = (): React.ReactElement => {
+  const userData = useSelector(selectUserData);
 
-export const DashboardsNavigator = (): React.ReactElement => (
-  <Stack.Navigator headerMode='none'>
-    <Stack.Screen name='Dashboards' component={DashboardsMenuNavigator}/>
-    <Stack.Screen name='Trainings1' component={Trainings1Screen}/>
-    <Stack.Screen name='Trainings2' component={Trainings2Screen}/>
-    <Stack.Screen name='Settings' component={SettingsScreen}/>
-  </Stack.Navigator>
-);
+  useEffect(() => {
+    setAuthorizationHeader(userData.token);
+
+    if (userData.tutorId) getTutorIdApi(userData.tutorId);
+    if (userData.studentId) getStudentByIdApi(userData.studentId);
+  }, [userData.token]);
+
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="MySessions" component={MySeesionsScreen} />
+    </Stack.Navigator>
+  );
+};

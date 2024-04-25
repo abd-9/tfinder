@@ -1,7 +1,14 @@
 import React from 'react';
-import { Dimensions, ListRenderItemInfo, StyleSheet } from 'react-native';
-import { Card, List, ListElement, ListItemElement, ListProps, Text } from '@ui-kitten/components';
-import { MenuItem } from '../model/menu-item.model';
+import {Dimensions, ListRenderItemInfo, StyleSheet} from 'react-native';
+import {
+  Card,
+  List,
+  ListElement,
+  ListItemElement,
+  ListProps,
+  Text,
+} from '@ui-kitten/components';
+import {MenuItem} from '../model/menu-item.model';
 
 export interface MenuGridListProps extends Omit<ListProps, 'renderItem'> {
   data: MenuItem[];
@@ -9,22 +16,16 @@ export interface MenuGridListProps extends Omit<ListProps, 'renderItem'> {
 }
 
 export const MenuGridList = (props: MenuGridListProps): ListElement => {
-
-  const { contentContainerStyle, onItemPress, ...listProps } = props;
+  const {contentContainerStyle, onItemPress, ...listProps} = props;
 
   const renderItem = (info: ListRenderItemInfo<MenuItem>): ListItemElement => (
-    <Card
-      style={styles.item}
-      onPress={() => props.onItemPress(info.index)}>
-      {info.item.icon({ width: 64, height: 64, alignSelf: 'center' })}
-      <Text
-        style={styles.itemTitle}
-        category='s2'>
+    <Card style={styles.item} onPress={() => props.onItemPress(info.index)}>
+      {info.item.icon({width: 64, height: 64, alignSelf: 'center'})}
+      <Text style={styles.itemTitle} category="s2">
         {info.item.title}
       </Text>
     </Card>
   );
-
 
   return (
     <List
