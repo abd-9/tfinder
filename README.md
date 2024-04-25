@@ -16,11 +16,8 @@ The objective of this software project is to develop a tutor-finding application
 
 
 ## Screenshots
-
-![App Screenshot](https://github.com/abd-9/tfinder/blob/main/Public/demo.gif?raw=true)
-
-
-
+[![Watch the video](https://github.com/abd-9/tfinder/blob/main/Public/demo.gif?raw=true)](https://drive.google.com/file/d/1lzDNohSQ-lnPI8JpcAlkRfNJL6cTmm8O/view?usp=drive_link)
+ 
 ## Tech Stack
 
 **Client:** React Native
